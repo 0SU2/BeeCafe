@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { loginUser } from './firebaseConfig';
+import { loginUser } from './modules/firebase/fireBaseConfig';
 
 export default function App() {
   const [email, setEmail] = useState('');
