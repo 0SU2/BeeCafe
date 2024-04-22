@@ -1,49 +1,170 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import * as React from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Modal } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { loginUser } from './modules/firebase/fireBaseConfig';
 
 export default function App() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [mostrarTarjeta, setMostrarTarjeta] = React.useState(false);
 
-  // Función para manejar el inicio de sesión
-  const handleLogin = () => {
-    loginUser(email, password); // Llama a la función de inicio de sesión de Firebase
+  const abrirTarjeta = () => {
+    setMostrarTarjeta(true);
   }
+
+  const cerrarTarjeta = () => {
+    // Los valores en el formulario se resetean
+    setNombre('');
+    setAPaterno('');
+    setAMaterno('');
+    setCorreo('');
+    setContrasena('');
+    setConfirmarContrasena('');
+    setMostrarTarjeta(false);
+  }
+
+const [nombre, setNombre] = React.useState('');
+const [aPaterno, setAPaterno] = React.useState('');
+const [aMaterno, setAMaterno] = React.useState('');
+const [correo, setCorreo] = React.useState('');
+const [contrasena, setContrasena] = React.useState('');
+const [confirmarContrasena, setConfirmarContrasena] = React.useState('');
+
+//Llenado del formulario
+const ingresarNombre = (text: string) => {
+  setNombre(text);
+}
+
+const ingresarAPaterno = (text: string) => {
+  setAPaterno(text);
+}
+
+const ingresarAMaterno = (text: string) => {
+  setAMaterno(text);
+}
+
+const ingresarCorreo = (text: string) => {
+  setCorreo(text);
+}
+
+const ingresarContrasena = (text: string) => {
+  setContrasena(text);
+}
+
+const ingresoConfirmarContrasena = (text: string) => {
+  setConfirmarContrasena(text);
+}
+
+const registroUsuario = () => {
+  // Verificación de que se llenó el formulario
+  if (!nombre || !aPaterno || !aMaterno || !correo || !contrasena || !confirmarContrasena) {
+    alert('Por favor, llene todos los campos.');
+    return;
+  }
+
+  // Verificación de que las contraseñas sean iguales
+  if (contrasena !== confirmarContrasena) {
+    alert('La contraseña y la confirmación de contraseña no coinciden.');
+    return;
+  }
+  
+  cerrarTarjeta();
+}
 
   return (
     <View style={styles.container}>
       <LinearGradient
+        // Background Linear Gradient
         colors={['#FFC600', '#FFFFFF']} // Amarillo en la parte superior a blanco hacia abajo
         style={styles.background}
         start={{ x: 0, y: 0 }} // Inicio del gradiente en la parte superior
-        end={{ x: 0, y: 1 }} // Final del gradiente en la parte inferior
+        end={{ x: 0, y: 1 }}   // Final del gradiente en la parte inferior
       />
       <Text style={styles.titulo}>BeeCafe</Text>
       <Text style={styles.subTitle}>Iniciar sesión en su cuenta</Text>
       <TextInput 
         style={styles.textInput}
-        placeholder="Correo Electronico"
-        onChangeText={setEmail}
-        value={email}
+        placeholder="Correo Electronico" 
       />
       <TextInput 
         style={styles.textInput}
-        placeholder="Contraseña"
-        onChangeText={setPassword}
-        value={password}
-        secureTextEntry // Oculta el texto de la contrasenia
+        placeholder="Contraseña" 
       />
-      <TouchableOpacity onPress={handleLogin}>
-        <LinearGradient
+      <View style={{ height: 20 }} //Salto de linea 
+      /> 
+      <LinearGradient
         // Button Linear Gradient
-          colors={['#4c669f', '#3b5998', '#192f6a']}
-          style={styles.button}
+        colors={['#4c669f', '#3b5998', '#192f6a']}
+        style={styles.button}>
+        <Text style={styles.text}>Iniciar Sesión</Text>
+      </LinearGradient>
+      
+      <View style={styles.registerContainer}
+      // Agrega el botón para ingresar datos de un registro
+      > 
+        <Text style={styles.registerText}>¿No tiene cuenta? </Text>
+        <TouchableOpacity onPress={abrirTarjeta} // Abre el formulario para registrar
+        > 
+          <Text style={styles.registerLink}>Regístrate</Text>
+        </TouchableOpacity>
+
+        <Modal
+          animationType="slide" 
+          transparent={true}
+          visible={mostrarTarjeta}
+          onRequestClose={cerrarTarjeta}
         >
-          <Text style={styles.text}>Iniciar Sesión</Text>
-        </LinearGradient>
-      </TouchableOpacity>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalText}>Registro</Text>
+            {/* Formulario de registro */}
+            <View style={styles.formContainer}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Nombre"
+                value={nombre}
+                onChangeText={ingresarNombre}
+              />
+              <TextInput
+                style={styles.textInput}
+                placeholder="Apellido Paterno"
+                value={aPaterno}
+                onChangeText={ingresarAPaterno}
+              />
+              <TextInput
+                style={styles.textInput}
+                placeholder="Apellido Materno"
+                value={aMaterno}
+                onChangeText={ingresarAMaterno}
+              />
+              <TextInput
+                style={styles.textInput}
+                placeholder="Correo"
+                value={correo}
+                onChangeText={ingresarCorreo}
+              />
+              <TextInput
+                style={styles.textInput}
+                placeholder="Contraseña"
+                secureTextEntry={true}
+                value={contrasena}
+                onChangeText={ingresarContrasena}
+              />
+              <TextInput
+                style={styles.textInput}
+                placeholder="Confirmar Contraseña"
+                secureTextEntry={true}
+                value={confirmarContrasena}
+                onChangeText={ingresoConfirmarContrasena}
+              />
+            </View>
+              <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end', marginTop: 'auto', marginBottom: 30 }}>
+                <TouchableOpacity style={[styles.modalButton, { marginRight: 10, width: 100, backgroundColor: 'red' }]} onPress={cerrarTarjeta}>
+                  <Text style={styles.modalButtonText}>Cerrar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.modalButton, { width: 100, backgroundColor: 'green' }]} onPress={registroUsuario}>
+                  <Text style={styles.modalButtonText}>Registrar</Text>
+                </TouchableOpacity>
+              </View>
+          </View>
+        </Modal>
+      </View>
     </View>
   );
 }
@@ -76,13 +197,11 @@ const styles = StyleSheet.create({
   titulo: {
     fontSize: 90,
     color: '#1b3b6a',
-    fontWeight: 'bold',
-    marginBottom: 20,
+    fontWeight: 'bold'
   },
   subTitle: {
     fontSize: 20,
     color: 'gray',
-    marginBottom: 20,
   },
   textInput: {
     padding: 10,
@@ -93,6 +212,61 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: '#fff',
     borderColor: '#000', // Color del marco: negro
-    borderWidth: 1, // Ancho del marco
+    borderWidth: 1 // Ancho del marco
+  },
+  registerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  registerText: {
+    fontSize: 15,
+    color: 'gray',
+    fontWeight: 'bold',
+  },
+  registerLink: {
+    fontSize: 15,
+    color: '#1b3b6a',
+    textDecorationLine: 'underline',
+    fontWeight: 'bold'
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    margin: 20,
+    borderRadius: 20,
+  },
+  modalText: {
+    marginTop: 40,
+    fontSize: 50,
+    color: '#1b3b6a',
+    fontWeight: 'bold'
+  },
+  modalButton: {
+    marginTop: 20,
+    padding: 10,
+    borderRadius: 5,
+    textAlign: 'center', // Centrar el texto
+    width: 100, // Ancho del botón
+  },
+  modalButtonText: {
+    fontSize: 15,
+    color: '#FFFFFF',
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  formContainer: {
+    marginTop: 50,
+    width: '100%',
+    alignItems: 'center',
+    marginVertical: 20,
   },
 });
+string: 
