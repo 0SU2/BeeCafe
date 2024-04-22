@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Modal } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Modal, Image, Button} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function App() {
@@ -78,6 +78,10 @@ const registroUsuario = () => {
         end={{ x: 0, y: 1 }}   // Final del gradiente en la parte inferior
       />
       <Text style={styles.titulo}>BeeCafe</Text>
+            <Image
+        source={require('./assets/LogoBeeCafe1.png')}
+        style={styles.logo}
+      />
       <Text style={styles.subTitle}>Iniciar sesión en su cuenta</Text>
       <TextInput 
         style={styles.textInput}
@@ -89,12 +93,17 @@ const registroUsuario = () => {
       />
       <View style={{ height: 20 }} //Salto de linea 
       /> 
-      <LinearGradient
-        // Button Linear Gradient
-        colors={['#4c669f', '#3b5998', '#192f6a']}
-        style={styles.button}>
-        <Text style={styles.text}>Iniciar Sesión</Text>
-      </LinearGradient>
+      <View style={styles.button}>
+        <LinearGradient
+          colors={['#4c669f', '#3b5998', '#192f6a']}
+          style={styles.gradient}>
+          <Button
+            onPress={() => alert('Prueba de Alerta')}
+            title="Iniciar Sesión"
+            color="#ffffff"
+          />
+        </LinearGradient>
+      </View>
       
       <View style={styles.registerContainer}
       // Agrega el botón para ingresar datos de un registro
@@ -183,11 +192,13 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0, // Modificado para extender el gradiente a todo el contenedor
   },
-  button: {
-    padding: 15,
-    alignItems: 'center',
+  gradient: {
     borderRadius: 5,
-    marginTop: 20,
+    overflow: 'hidden', // Mantiene el gradiente dentro del borde redondeado
+  },
+  button: {
+    width: '80%',
+    borderRadius: 5,
   },
   text: {
     backgroundColor: 'transparent',
@@ -202,6 +213,7 @@ const styles = StyleSheet.create({
   subTitle: {
     fontSize: 20,
     color: 'gray',
+    marginTop: 10,
   },
   textInput: {
     padding: 10,
@@ -213,6 +225,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderColor: '#000', // Color del marco: negro
     borderWidth: 1 // Ancho del marco
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginTop: 5,
   },
   registerContainer: {
     flexDirection: 'row',
