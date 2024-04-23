@@ -67,8 +67,8 @@ const loginUser = (email, password) => {
     });
 }
 
-const sendPasswordReset = (email) => {
-  sendPasswordResetEmail(auth, email)
+const sendPasswordReset = async(email) => {
+  await sendPasswordResetEmail(auth, email)
     .then(() => {
       console.log("@@ Se envio restablecimiento de contrasenia a:", email);
     })

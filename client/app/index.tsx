@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Modal, Image, Button} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Link } from 'expo-router';
 
 export default function App() {
   const [mostrarTarjeta, setMostrarTarjeta] = React.useState(false);
@@ -20,53 +21,53 @@ export default function App() {
     setMostrarTarjeta(false);
   }
 
-const [nombre, setNombre] = React.useState('');
-const [aPaterno, setAPaterno] = React.useState('');
-const [aMaterno, setAMaterno] = React.useState('');
-const [correo, setCorreo] = React.useState('');
-const [contrasena, setContrasena] = React.useState('');
-const [confirmarContrasena, setConfirmarContrasena] = React.useState('');
+  const [nombre, setNombre] = React.useState('');
+  const [aPaterno, setAPaterno] = React.useState('');
+  const [aMaterno, setAMaterno] = React.useState('');
+  const [correo, setCorreo] = React.useState('');
+  const [contrasena, setContrasena] = React.useState('');
+  const [confirmarContrasena, setConfirmarContrasena] = React.useState('');
 
-//Llenado del formulario
-const ingresarNombre = (text: string) => {
-  setNombre(text);
-}
-
-const ingresarAPaterno = (text: string) => {
-  setAPaterno(text);
-}
-
-const ingresarAMaterno = (text: string) => {
-  setAMaterno(text);
-}
-
-const ingresarCorreo = (text: string) => {
-  setCorreo(text);
-}
-
-const ingresarContrasena = (text: string) => {
-  setContrasena(text);
-}
-
-const ingresoConfirmarContrasena = (text: string) => {
-  setConfirmarContrasena(text);
-}
-
-const registroUsuario = () => {
-  // Verificación de que se llenó el formulario
-  if (!nombre || !aPaterno || !aMaterno || !correo || !contrasena || !confirmarContrasena) {
-    alert('Por favor, llene todos los campos.');
-    return;
+  //Llenado del formulario
+  const ingresarNombre = (text: string) => {
+    setNombre(text);
   }
 
-  // Verificación de que las contraseñas sean iguales
-  if (contrasena !== confirmarContrasena) {
-    alert('La contraseña y la confirmación de contraseña no coinciden.');
-    return;
+  const ingresarAPaterno = (text: string) => {
+    setAPaterno(text);
   }
-  
-  cerrarTarjeta();
-}
+
+  const ingresarAMaterno = (text: string) => {
+    setAMaterno(text);
+  }
+
+  const ingresarCorreo = (text: string) => {
+    setCorreo(text);
+  }
+
+  const ingresarContrasena = (text: string) => {
+    setContrasena(text);
+  }
+
+  const ingresoConfirmarContrasena = (text: string) => {
+    setConfirmarContrasena(text);
+  }
+
+  const registroUsuario = () => {
+    // Verificación de que se llenó el formulario
+    if (!nombre || !aPaterno || !aMaterno || !correo || !contrasena || !confirmarContrasena) {
+      alert('Por favor, llene todos los campos.');
+      return;
+    }
+
+    // Verificación de que las contraseñas sean iguales
+    if (contrasena !== confirmarContrasena) {
+      alert('La contraseña y la confirmación de contraseña no coinciden.');
+      return;
+    }
+    
+    cerrarTarjeta();
+  }
 
   return (
     <View style={styles.container}>
@@ -78,8 +79,8 @@ const registroUsuario = () => {
         end={{ x: 0, y: 1 }}   // Final del gradiente en la parte inferior
       />
       <Text style={styles.titulo}>BeeCafe</Text>
-            <Image
-        source={require('./assets/LogoBeeCafe1.png')}
+      <Image
+        source={require('../assets/LogoBeeCafe1.png')}
         style={styles.logo}
       />
       <Text style={styles.subTitle}>Iniciar sesión en su cuenta</Text>
@@ -100,11 +101,15 @@ const registroUsuario = () => {
           <Button
             onPress={() => alert('Prueba de Alerta')}
             title="Iniciar Sesión"
-            color="#ffffff"
           />
         </LinearGradient>
       </View>
-      
+
+      <View style={styles.registerContainer}>
+        <Text style={styles.registerText}>Recuperar </Text>
+        <Link href="/recovery" style={styles.registerLink}>contraseña</Link>
+      </View>     
+
       <View style={styles.registerContainer}
       // Agrega el botón para ingresar datos de un registro
       > 
@@ -113,7 +118,7 @@ const registroUsuario = () => {
         > 
           <Text style={styles.registerLink}>Regístrate</Text>
         </TouchableOpacity>
-
+        <View style={{ height: 20}}/>
         <Modal
           animationType="slide" 
           transparent={true}
