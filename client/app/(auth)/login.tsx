@@ -1,14 +1,24 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Modal, Image, Button} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Modal, Image, Button, Pressable} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
+import { useAuth } from '../../modules/context/auth';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { useTogglePasswordVisibility } from '../../modules/components/togglePassword';
 
 export default function App() {
   const [mostrarTarjeta, setMostrarTarjeta] = React.useState(false);
+  const [nombre, setNombre] = React.useState('');
+  const [aPaterno, setAPaterno] = React.useState('');
+  const [aMaterno, setAMaterno] = React.useState('');
+  const [correo, setCorreo] = React.useState('');
+  const [contrasena, setContrasena] = React.useState('');
+  const [confirmarContrasena, setConfirmarContrasena] = React.useState('');
+  const { passwordVisibility, rightIcon, handlePasswordVisibility } = useTogglePasswordVisibility();
 
-  const abrirTarjeta = () => {
-    setMostrarTarjeta(true);
-  }
+  // funcion signIn para la validacion del usuario y cambiarlo a la view 
+  // del menu
+  const { signIn } =  useAuth();
 
   const cerrarTarjeta = () => {
     // Los valores en el formulario se resetean
@@ -19,38 +29,6 @@ export default function App() {
     setContrasena('');
     setConfirmarContrasena('');
     setMostrarTarjeta(false);
-  }
-
-  const [nombre, setNombre] = React.useState('');
-  const [aPaterno, setAPaterno] = React.useState('');
-  const [aMaterno, setAMaterno] = React.useState('');
-  const [correo, setCorreo] = React.useState('');
-  const [contrasena, setContrasena] = React.useState('');
-  const [confirmarContrasena, setConfirmarContrasena] = React.useState('');
-
-  //Llenado del formulario
-  const ingresarNombre = (text: string) => {
-    setNombre(text);
-  }
-
-  const ingresarAPaterno = (text: string) => {
-    setAPaterno(text);
-  }
-
-  const ingresarAMaterno = (text: string) => {
-    setAMaterno(text);
-  }
-
-  const ingresarCorreo = (text: string) => {
-    setCorreo(text);
-  }
-
-  const ingresarContrasena = (text: string) => {
-    setContrasena(text);
-  }
-
-  const ingresoConfirmarContrasena = (text: string) => {
-    setConfirmarContrasena(text);
   }
 
   const registroUsuario = () => {
@@ -80,26 +58,49 @@ export default function App() {
       />
       <Text style={styles.titulo}>BeeCafe</Text>
       <Image
-        source={require('../assets/LogoBeeCafe1.png')}
+        source={require('../../assets/images/LogoBeeCafe1.png')}
         style={styles.logo}
       />
       <Text style={styles.subTitle}>Iniciar sesión en su cuenta</Text>
-      <TextInput 
-        style={styles.textInput}
-        placeholder="Correo Electronico" 
-      />
-      <TextInput 
-        style={styles.textInput}
-        placeholder="Contraseña" 
-      />
-      <View style={{ height: 20 }} //Salto de linea 
-      /> 
+      <View
+        style={styles.inputsContainer}
+      >
+        <TextInput 
+          value={correo}
+          onChangeText={(text) => setCorreo(text)}
+          style={styles.inputField}
+          placeholder="Correo Electronico" 
+        />
+      </View>
+      <View
+        style={styles.inputsContainer}
+      >
+        <TextInput  
+          style={styles.inputField}
+          secureTextEntry={passwordVisibility}
+          value={contrasena}
+          onChangeText={(text) => setContrasena(text)}
+          placeholder="Contraseña" 
+        />
+        <Pressable
+          onPress={handlePasswordVisibility}
+        >
+          <Ionicons
+            name={rightIcon}
+            color="#000"
+            size={20}
+          />
+        </Pressable>
+
+      </View>
       <View style={styles.button}>
         <LinearGradient
           colors={['#4c669f', '#3b5998', '#192f6a']}
           style={styles.gradient}>
           <Button
-            onPress={() => alert('Prueba de Alerta')}
+            onPress={() => {
+              signIn(correo, contrasena)
+            }}
             title="Iniciar Sesión"
           />
         </LinearGradient>
@@ -107,14 +108,14 @@ export default function App() {
 
       <View style={styles.registerContainer}>
         <Text style={styles.registerText}>Recuperar </Text>
-        <Link href="/recovery" style={styles.registerLink}>contraseña</Link>
+        <Link href="/(auth)/recovery" style={styles.registerLink}>contraseña</Link>
       </View>     
 
       <View style={styles.registerContainer}
       // Agrega el botón para ingresar datos de un registro
       > 
         <Text style={styles.registerText}>¿No tiene cuenta? </Text>
-        <TouchableOpacity onPress={abrirTarjeta} // Abre el formulario para registrar
+        <TouchableOpacity onPress={() => setMostrarTarjeta(true)} // Abre el formulario para registrar
         > 
           <Text style={styles.registerLink}>Regístrate</Text>
         </TouchableOpacity>
@@ -133,49 +134,59 @@ export default function App() {
                 style={styles.textInput}
                 placeholder="Nombre"
                 value={nombre}
-                onChangeText={ingresarNombre}
+                onChangeText={(text) => setNombre(text)}
               />
               <TextInput
                 style={styles.textInput}
                 placeholder="Apellido Paterno"
                 value={aPaterno}
-                onChangeText={ingresarAPaterno}
+                onChangeText={(text) => setAPaterno(text)}
               />
               <TextInput
                 style={styles.textInput}
                 placeholder="Apellido Materno"
                 value={aMaterno}
-                onChangeText={ingresarAMaterno}
+                onChangeText={(text) => setAMaterno(text)}
               />
               <TextInput
                 style={styles.textInput}
                 placeholder="Correo"
                 value={correo}
-                onChangeText={ingresarCorreo}
+                onChangeText={(text) => setCorreo(text)}
               />
               <TextInput
                 style={styles.textInput}
                 placeholder="Contraseña"
                 secureTextEntry={true}
                 value={contrasena}
-                onChangeText={ingresarContrasena}
+                onChangeText={(text) => setContrasena(text)}
               />
               <TextInput
                 style={styles.textInput}
                 placeholder="Confirmar Contraseña"
                 secureTextEntry={true}
                 value={confirmarContrasena}
-                onChangeText={ingresoConfirmarContrasena}
+                onChangeText={(text) => setConfirmarContrasena(text)}
               />
+              <TouchableOpacity 
+                style={[
+                  styles.modalButton, 
+                  { width: 100, backgroundColor: 'green' }
+                ]} 
+                onPress={registroUsuario}
+              >
+                <Text style={styles.modalButtonText}>Registrar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[
+                  styles.modalButton, 
+                  {  width: 100, backgroundColor: 'red' }
+                ]} 
+                onPress={cerrarTarjeta}
+              >
+                <Text style={styles.modalButtonText}>Cerrar</Text>
+              </TouchableOpacity>
             </View>
-              <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end', marginTop: 'auto', marginBottom: 30 }}>
-                <TouchableOpacity style={[styles.modalButton, { marginRight: 10, width: 100, backgroundColor: 'red' }]} onPress={cerrarTarjeta}>
-                  <Text style={styles.modalButtonText}>Cerrar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.modalButton, { width: 100, backgroundColor: 'green' }]} onPress={registroUsuario}>
-                  <Text style={styles.modalButtonText}>Registrar</Text>
-                </TouchableOpacity>
-              </View>
           </View>
         </Modal>
       </View>
@@ -203,6 +214,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '80%',
+    margin: 10,
     borderRadius: 5,
   },
   text: {
@@ -218,7 +230,7 @@ const styles = StyleSheet.create({
   subTitle: {
     fontSize: 20,
     color: 'gray',
-    marginTop: 10,
+    margin: 10,
   },
   textInput: {
     padding: 10,
@@ -240,7 +252,7 @@ const styles = StyleSheet.create({
   registerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 20,
+    margin: 10,
   },
   registerText: {
     fontSize: 15,
@@ -291,4 +303,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 20,
   },
+  inputsContainer: {
+    margin: 5,
+    backgroundColor: 'white',
+    width: '80%',
+    borderRadius: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#000'
+  },
+  inputField: {
+    marginLeft: 10,
+    padding: 12,
+    fontSize: 14,
+    width: '84%'
+  }
 });

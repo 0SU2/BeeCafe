@@ -38,9 +38,9 @@ if (!getApps().length) {
 }
 
 // Registrar nuevos usuarios
-const registerUser = (email, password) => {
+const registerUser = async(email, password) => {
   console.log("Registrando nuevo usuario...");
-  createUserWithEmailAndPassword(auth, email, password)
+  await createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
       console.log("@@ Usuario registrado correctamente:", user);
@@ -53,9 +53,9 @@ const registerUser = (email, password) => {
 }
 
 // Iniciar sesión usuarios existentes
-const loginUser = (email, password) => {
+const loginUser = async(email, password) => {
   console.log("Iniciando sesion...");
-  signInWithEmailAndPassword(auth, email, password)
+  await signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
       console.log("@@ Inicio de sesion correcto", user);
