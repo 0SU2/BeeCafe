@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Modal, Image, Button} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
+import { registerUser, loginUser } from '../modules/firebase/fireBaseConfig';
 
 export default function App() {
   const [mostrarTarjeta, setMostrarTarjeta] = React.useState(false);
@@ -53,7 +54,7 @@ export default function App() {
     setConfirmarContrasena(text);
   }
 
-  const registroUsuario = () => {
+  const registroUsuario = async () => {
     // Verificación de que se llenó el formulario
     if (!nombre || !aPaterno || !aMaterno || !correo || !contrasena || !confirmarContrasena) {
       alert('Por favor, llene todos los campos.');
@@ -65,9 +66,26 @@ export default function App() {
       alert('La contraseña y la confirmación de contraseña no coinciden.');
       return;
     }
-    
+
+    try{
+      await registerUser(correo, contrasena, nombre, aPaterno, aMaterno);
+      cerrarTarjeta();
+      alert('Usuario registrado correctamente');
+    }catch(error) {
+      alert('Error al registrar el usuario: ' + error.message);
+    }
     cerrarTarjeta();
   }
+
+  const iniciarSesion = async () => {
+    try {
+      await loginUser(correo, contrasena);
+      alert('Inicio exitoso');
+    } catch (error) {
+      alert('Error: ' + error.message);
+    }
+  }
+  
 
   return (
     <View style={styles.container}>
@@ -87,10 +105,15 @@ export default function App() {
       <TextInput 
         style={styles.textInput}
         placeholder="Correo Electronico" 
+        value={correo}
+        onChangeText={ingresarCorreo}
       />
       <TextInput 
         style={styles.textInput}
         placeholder="Contraseña" 
+        value={contrasena}
+        onChangeText={ingresarContrasena}
+        secureTextEntry
       />
       <View style={{ height: 20 }} //Salto de linea 
       /> 
@@ -99,7 +122,7 @@ export default function App() {
           colors={['#4c669f', '#3b5998', '#192f6a']}
           style={styles.gradient}>
           <Button
-            onPress={() => alert('Prueba de Alerta')}
+            onPress={iniciarSesion}
             title="Iniciar Sesión"
           />
         </LinearGradient>

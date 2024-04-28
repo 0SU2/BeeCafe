@@ -1,7 +1,9 @@
+// Archivo de inicializacion de funciones de Firebase
+// **** En Firebase asegurarse de tener correctamente las reglas de Firestore para escribir ****
 
-// NOTA: Este archivo no lo encuentra si esta dentro del server, pero si esta dentro del client si va a funciona
 import { getApp, getApps, initializeApp } from 'firebase/app';
 import { initializeAuth, getReactNativePersistence ,createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, getAuth } from 'firebase/auth';
+import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 
 // env variables para la configuracion de firebase, debes agregarlas en tu archivo .env con los nombres que se indican
@@ -21,7 +23,7 @@ const firebaseConfig = {
 
 // Inicializar firebase, previene que se reinicie en caso de que la pagina recargue
 // provocando un error
-let app, auth;
+let app, auth, db;
 
 if (!getApps().length) {
   try {
@@ -29,43 +31,60 @@ if (!getApps().length) {
     auth = initializeAuth(app, {
       persistence: getReactNativePersistence(ReactNativeAsyncStorage),
     });
+  db = getFirestore(app); // Inicializa Firestore
   } catch (error) {
     console.log("@@ Error de inicialización " + error);
   }
 } else {
   app = getApp();
   auth = getAuth(app);
+  db = getFirestore(app);
 }
 
 // Registrar nuevos usuarios
-const registerUser = (email, password) => {
-  console.log("Registrando nuevo usuario...");
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      console.log("@@ Usuario registrado correctamente:", user);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.error("@@ Error al registrar usuario:", errorCode, errorMessage);
+const registerUser = async (email, password, nombre, aPaterno, aMaterno) => {
+  console.log("@@@@ Registrando nuevo usuario...");
+  try {
+    // Crea el usuario en Firebase Authentication
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Guarda información adicional en Firestore
+    await setDoc(doc(db, 'usuarios', user.uid), {
+      est_apeMat: aMaterno,
+      est_apePat: aPaterno,
+      est_correo: email,
+      est_nombre: nombre,
+      est_password: password,
     });
+    console.log("@@ Usuario registrado correctamente:", user);
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.error("@@ Error al registrar usuario:", errorCode, errorMessage);
+    throw error; // Propaga el error para manejarlo en la aplicación
+  }
 }
 
 // Iniciar sesión usuarios existentes
 const loginUser = (email, password) => {
-  console.log("Iniciando sesion...");
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      console.log("@@ Inicio de sesion correcto", user);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.error("@@ Error al iniciar sesion:", errorCode, errorMessage);
-    });
+  console.log("@@@@ Iniciando sesion...");
+  return new Promise((resolve, reject) => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log("@@ Inicio correcto:", user);
+        resolve(user); // Resolver la promesa con el usuario
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error("@@ Error:", errorCode, errorMessage);
+        reject(error); // Rechazar la promesa con el error
+      });
+  });
 }
+
 
 const sendPasswordReset = async(email) => {
   await sendPasswordResetEmail(auth, email)
