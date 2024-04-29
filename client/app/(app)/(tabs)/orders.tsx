@@ -94,9 +94,9 @@ export default function OrderLayoutTab() {
               <Text style={styles.total}>Total: ${orderDetails.reduce((total, item) => total + item.price, 0).toFixed(2)}</Text>
               <View style={styles.orderActions}></View>
             <View style={styles.orderActions}>
-              <Button title="Cancelar Pedido" onPress={cancelOrder} />
+              <Button title="Cancelar Pedido" onPress={cancelOrder} color={"red"} />
                 {!paymentSuccess ? (
-              <Button title="Pagar Pedido" onPress={payOrder} />
+              <Button title="Pagar Pedido" onPress={payOrder} color={"green"}/>
                 ) : (
               <View style={styles.paymentSuccess}>
                   <FontAwesome5 name="check-circle" size={24} color="green" />
