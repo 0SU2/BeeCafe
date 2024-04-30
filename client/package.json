@@ -8,8 +8,10 @@
     "ios": "expo start --ios",
     "web": "expo start --web"
   },
+  "type": "module",
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.21.0",
+    "axios": "^1.6.8",
     "expo": "~50.0.14",
     "expo-linear-gradient": "^12.7.2",
     "expo-status-bar": "~1.11.1",

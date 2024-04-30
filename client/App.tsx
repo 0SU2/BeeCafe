@@ -1,8 +1,31 @@
-import * as React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Modal, Image, Button} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Modal, Image, Button, FlatList} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+//import axios from "axios";
+import { getEst, postEst} from './api';
 
 export default function App() {
+
+
+  const [input,forms] = useState({
+    nombre:"",
+    apePaterno:"",
+    apeMaterno:"",
+    correo:"",
+    contrasena:"",
+  });
+
+  // valores que recibe del registro
+  const RegValues = (name:string, value:string) => forms({...input, [name]: value});
+  
+  const registro = () => {
+    //console.log(input.nombre,input.apePaterno,input.apeMaterno,input.correo,input.contrasena);
+    //postEst(input.nombre,input.apePaterno,input.apeMaterno,input.correo,input.contrasena);
+    postEst(input);
+
+  }
+
+
   const [mostrarTarjeta, setMostrarTarjeta] = React.useState(false);
 
   const abrirTarjeta = () => {
@@ -10,63 +33,8 @@ export default function App() {
   }
 
   const cerrarTarjeta = () => {
-    // Los valores en el formulario se resetean
-    setNombre('');
-    setAPaterno('');
-    setAMaterno('');
-    setCorreo('');
-    setContrasena('');
-    setConfirmarContrasena('');
     setMostrarTarjeta(false);
   }
-
-const [nombre, setNombre] = React.useState('');
-const [aPaterno, setAPaterno] = React.useState('');
-const [aMaterno, setAMaterno] = React.useState('');
-const [correo, setCorreo] = React.useState('');
-const [contrasena, setContrasena] = React.useState('');
-const [confirmarContrasena, setConfirmarContrasena] = React.useState('');
-
-//Llenado del formulario
-const ingresarNombre = (text: string) => {
-  setNombre(text);
-}
-
-const ingresarAPaterno = (text: string) => {
-  setAPaterno(text);
-}
-
-const ingresarAMaterno = (text: string) => {
-  setAMaterno(text);
-}
-
-const ingresarCorreo = (text: string) => {
-  setCorreo(text);
-}
-
-const ingresarContrasena = (text: string) => {
-  setContrasena(text);
-}
-
-const ingresoConfirmarContrasena = (text: string) => {
-  setConfirmarContrasena(text);
-}
-
-const registroUsuario = () => {
-  // Verificación de que se llenó el formulario
-  if (!nombre || !aPaterno || !aMaterno || !correo || !contrasena || !confirmarContrasena) {
-    alert('Por favor, llene todos los campos.');
-    return;
-  }
-
-  // Verificación de que las contraseñas sean iguales
-  if (contrasena !== confirmarContrasena) {
-    alert('La contraseña y la confirmación de contraseña no coinciden.');
-    return;
-  }
-  
-  cerrarTarjeta();
-}
 
   return (
     <View style={styles.container}>
@@ -85,14 +53,16 @@ const registroUsuario = () => {
       <Text style={styles.subTitle}>Iniciar sesión en su cuenta</Text>
       <TextInput 
         style={styles.textInput}
-        placeholder="Correo Electronico" 
+        placeholder="Correo Electronicoooo" 
       />
       <TextInput 
         style={styles.textInput}
-        placeholder="Contraseña" 
+        placeholder="Contraseñaaa" 
+
       />
       <View style={{ height: 20 }} //Salto de linea 
       /> 
+
       <View style={styles.button}>
         <LinearGradient
           colors={['#4c669f', '#3b5998', '#192f6a']}
@@ -120,54 +90,56 @@ const registroUsuario = () => {
           visible={mostrarTarjeta}
           onRequestClose={cerrarTarjeta}
         >
+
           <View style={styles.modalContainer}>
             <Text style={styles.modalText}>Registro</Text>
             {/* Formulario de registro */}
             <View style={styles.formContainer}>
               <TextInput
                 style={styles.textInput}
-                placeholder="Nombre"
-                value={nombre}
-                onChangeText={ingresarNombre}
+                placeholder="Nombreee"
+                value={input.nombre}
+                onChangeText={ (text) => RegValues("nombre",text) }
               />
               <TextInput
                 style={styles.textInput}
                 placeholder="Apellido Paterno"
-                value={aPaterno}
-                onChangeText={ingresarAPaterno}
+                value={input.apePaterno}
+                onChangeText={ (text) => RegValues("apePaterno",text) }
               />
               <TextInput
                 style={styles.textInput}
                 placeholder="Apellido Materno"
-                value={aMaterno}
-                onChangeText={ingresarAMaterno}
+                value={input.apeMaterno}
+                onChangeText={ (text) => RegValues("apeMaterno",text) }
               />
               <TextInput
                 style={styles.textInput}
                 placeholder="Correo"
-                value={correo}
-                onChangeText={ingresarCorreo}
+                value={input.correo}
+                onChangeText={ (text) => RegValues("correo",text) }
               />
               <TextInput
                 style={styles.textInput}
                 placeholder="Contraseña"
                 secureTextEntry={true}
-                value={contrasena}
-                onChangeText={ingresarContrasena}
+                //value={input.contrasena}
+                //onChangeText={ingresarContrasena}
               />
               <TextInput
                 style={styles.textInput}
                 placeholder="Confirmar Contraseña"
                 secureTextEntry={true}
-                value={confirmarContrasena}
-                onChangeText={ingresoConfirmarContrasena}
+                value={input.contrasena}
+                onChangeText={ (text) => RegValues("contrasena",text) }
               />
             </View>
               <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end', marginTop: 'auto', marginBottom: 30 }}>
                 <TouchableOpacity style={[styles.modalButton, { marginRight: 10, width: 100, backgroundColor: 'red' }]} onPress={cerrarTarjeta}>
                   <Text style={styles.modalButtonText}>Cerrar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.modalButton, { width: 100, backgroundColor: 'green' }]} onPress={registroUsuario}>
+                <TouchableOpacity style={[styles.modalButton, { width: 100, backgroundColor: 'green' }]} 
+                onPress={registro}>
                   <Text style={styles.modalButtonText}>Registrar</Text>
                 </TouchableOpacity>
               </View>
@@ -177,6 +149,7 @@ const registroUsuario = () => {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
