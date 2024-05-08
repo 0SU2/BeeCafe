@@ -11,7 +11,7 @@
     "dev": "nodemon ./src/app.js",
     "controller": "nodemon ./src/controllers/CregistrarEst.js",
     "db": "nodemon ./src/database.js",
-    "start": " node ./dist/index.cjs"
+    "start": " node ./src/index.js"
   },
   "keywords": [],
   "author": "",
