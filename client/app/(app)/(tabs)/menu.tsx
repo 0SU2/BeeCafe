@@ -1,12 +1,12 @@
-import React from 'react';
-import { ScrollView, StyleSheet, View, Text } from 'react-native';
-import { Card, Button } from 'react-native-paper';
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, View, Text, Modal } from 'react-native';
+import { Card, Button, Portal, Provider, Paragraph } from 'react-native-paper';
 
 interface FoodItem {
-  id: number;
-  title: string;
-  description: string;
-  price: string;
+  id: number
+  title: string
+  description: string
+  price: string
 }
 
 const foodList: FoodItem[] = [
@@ -30,7 +30,7 @@ const foodList: FoodItem[] = [
   },
 ];
 
-const FoodCard: React.FC<{ food: FoodItem, onAddToCart: (id: number) => void }> = ({ food, onAddToCart }) => (
+const FoodCard: React.FC<{ food: FoodItem, onAddToCart: (id: number) => void, onShowDetails: (food: FoodItem) => void }> = ({ food, onAddToCart, onShowDetails }) => (
   <Card style={styles.card}>
     <Card.Title title={food.title} subtitle={food.price} />
     <Card.Cover source={{ uri: 'https://picsum.photos/700' }} style={styles.cardImage} />
@@ -38,24 +38,60 @@ const FoodCard: React.FC<{ food: FoodItem, onAddToCart: (id: number) => void }> 
       <Button mode="contained" onPress={() => onAddToCart(food.id)} color="blue">
         Añadir al Carrito
       </Button>
+      <Button mode="outlined" onPress={() => onShowDetails(food)} color="blue">
+        Ver Detalles
+      </Button>
     </Card.Actions>
   </Card>
 );
 
+const FoodDetailsModal: React.FC<{ visible: boolean, food: FoodItem | null, onClose: () => void }> = ({ visible, food, onClose }) => (
+  <Portal>
+    <Modal visible={visible} animationType="slide" transparent={true}>
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>{food?.title}</Text>
+          <Paragraph style={styles.modalDescription}>{food?.description}</Paragraph>
+          <Text style={styles.modalPrice}>{food?.price}</Text>
+          <Button mode="contained" onPress={onClose} style={styles.closeButton}>
+            Cerrar
+          </Button>
+        </View>
+      </View>
+    </Modal>
+  </Portal>
+)
+
 export default function TabOneScreen() {
+  const [selectedFood, setSelectedFood] = useState<FoodItem | null>(null);
+  const [isModalVisible, setModalVisible] = useState(false);
+
   const handleAddToCart = (id: number) => {
     console.log(`Producto ${id} añadido al carrito`);
   };
 
+  const handleShowDetails = (food: FoodItem) => {
+    setSelectedFood(food);
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setSelectedFood(null);
+  };
+
   return (
-    <View style={styles.fullScreen}>
-      <Text style={styles.title}>¿Que se te antoja?</Text>
-      <ScrollView style={styles.scrollView}>
-        {foodList.map(food => (
-          <FoodCard key={food.id} food={food} onAddToCart={handleAddToCart} />
-        ))}
-      </ScrollView>
-    </View>
+    <Provider>
+      <View style={styles.fullScreen}>
+        <Text style={styles.title}>¿Qué se te antoja?</Text>
+        <ScrollView style={styles.scrollView}>
+          {foodList.map(food => (
+            <FoodCard key={food.id} food={food} onAddToCart={handleAddToCart} onShowDetails={handleShowDetails} />
+          ))}
+        </ScrollView>
+        <FoodDetailsModal visible={isModalVisible} food={selectedFood} onClose={handleCloseModal} />
+      </View>
+    </Provider>
   );
 }
 
@@ -82,5 +118,35 @@ const styles = StyleSheet.create({
   },
   cardImage: {
     height: 200,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  modalDescription: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  modalPrice: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  closeButton: {
+    marginTop: 20,
   },
 });
