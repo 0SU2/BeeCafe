@@ -8,22 +8,24 @@ export const getEstudiantes = async (req,res) =>{
     res.json(rows);
 };
 
+
 export const registrarEstudiante = async (req,res) =>{
+    //res.send("REGISTROOO");
     try{
         const conn =await connDB(); 
         const body = req.body;
         const [result] = await conn.execute(
-            "INSERT INTO estudiantes(est_nombre,est_apePat,est_apeMat,est_correo,est_contrasena)  VALUES(?,?,?,?,?)", 
+            "INSERT INTO estudiantes (est_nombre,est_apePat,est_apeMat,est_correo,est_contrasena)  VALUES(?,?,?,?,?)", 
             [body.est_nombre,body.est_apePat,body.est_apeMat,body.est_correo,body.est_contrasena]
             
         );
-
-        //res.json(result);
+        res.json(result);
         const newEst = {
             est_id: result.insertId,
             ...req.body,
         };
         res.json(newEst);
+        
         console.log(result,'RegEstudiante');
     }catch(err){
         console.error(err);

@@ -9,9 +9,12 @@ import { useTogglePasswordVisibility } from '../../modules/components/togglePass
 
 export default function App() {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } = useTogglePasswordVisibility();
+  
   // valores que recibe del registro
   const RegValues = (name:string, value:string) => forms({...input, [name]: value});
+
   const [mostrarTarjeta, setMostrarTarjeta] = React.useState(false);
+
   const [input,forms] = React.useState({
     nombre:"",
     apePaterno:"",
@@ -19,15 +22,17 @@ export default function App() {
     correo:"",
     contrasena:"",
   });
-  
-  // funcion signIn para la validacion del usuario y cambiarlo a la view 
+
+    // funcion signIn para la validacion del usuario y cambiarlo a la view 
   // del menu
   const { signIn } =  useAuth();  
   
   const registro = () => {
     //console.log(input.nombre,input.apePaterno,input.apeMaterno,input.correo,input.contrasena);
     //postEst(input.nombre,input.apePaterno,input.apeMaterno,input.correo,input.contrasena);
-    postEst(input);
+    console.log(input);
+    
+    postEst(forms);
 
   }
   const abrirTarjeta = () => {
@@ -77,7 +82,7 @@ export default function App() {
         />
         <Pressable onPress={handlePasswordVisibility} >
           <Ionicons
-            name={rightIcon}
+            //name={rightIcon}
             color="#000"
             size={20}
           />

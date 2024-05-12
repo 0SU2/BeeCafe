@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "database.js",
-  
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel  ./src -d dist",
     "devv": "nodemon ./src/index.js --exec babel-node",
     "dev": "nodemon ./src/app.js",
     "controller": "nodemon ./src/controllers/CregistrarEst.js",
+    "route": "nodemon ./src/routes/registrarEst.js",
     "db": "nodemon ./src/database.js",
     "start": " node ./src/index.js"
   },
