@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS tipoUsuario(
 );
 */
 
+
 CREATE TABLE IF NOT EXISTS menu (
     men_id INT NOT NULL AUTO_INCREMENT,
     men_platillo VARCHAR(255) NOT NULL,
@@ -75,6 +76,8 @@ CREATE TABLE IF NOT EXISTS menu (
     PRIMARY KEY (men_id)
 );
 
+
+
 INSERT INTO menu(men_platillo, men_descripcion, men_tipo, men_categoria, men_precio, men_disponible, men_ingredientes, men_tiempo_preparacion)
 	VALUES('Pozole con Salchicha', 'pozole con salchicha', 'Comida', 'Sopas', 85.00, 1, 'Salchicha, maíz, chile, cebolla, ajo', 45);
 
@@ -85,13 +88,22 @@ CREATE TABLE IF NOT EXISTS carrito(
     car_men_id INT NOT NULL,
     car_descripcion TEXT,
     car_cantidadFinal DECIMAL(10,2) NOT NULL,
+    
     PRIMARY KEY (car_id),
     CONSTRAINT fk_carrito_estudiantes
         FOREIGN KEY (car_est_id)
         REFERENCES estudiantes(est_id)
         ON DELETE CASCADE
+        ON UPDATE CASCADE,
+        
+        
+	    CONSTRAINT fk_carrito_menu
+        FOREIGN KEY (car_men_id)
+        REFERENCES menu(men_id)
+        ON DELETE CASCADE
         ON UPDATE CASCADE
 );
+
 
 INSERT INTO carrito(car_est_id,car_men_id,car_cantidadFinal,car_descripcion)
 	VALUES('1','1','123.43','no colocar x cosa');
