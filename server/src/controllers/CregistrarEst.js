@@ -13,7 +13,7 @@ export const registrarEstudiante = async (req,res) =>{
     //res.send("REGISTROOO");
     try{
         const conn =await connDB(); 
-        const body = req.body;
+        const body = req.body.newEst;
         const [result] = await conn.execute(
             "INSERT INTO estudiantes (est_nombre,est_apePat,est_apeMat,est_correo,est_contrasena)  VALUES(?,?,?,?,?)", 
             [body.nombre,body.apePaterno,body.apeMaterno,body.correo,body.contrasena]
@@ -24,14 +24,15 @@ export const registrarEstudiante = async (req,res) =>{
             est_id: result.insertId,
             ...req.body,
         };
-        res.json(newEst,"thissss");
-        
-        console.log(result,'RegEstudiante');
+        res.json({"success": true, "msg": newEst })
+        console.log(newEst);
     }catch(err){
         console.error(err);
+        res.json({"success" : false , "msg": err.sqlMessage })
     }
 }; 
 
 export const getText = (req,res) =>{
     res.send("msj");
 };
+

@@ -1,5 +1,6 @@
 import { useRouter, useSegments } from 'expo-router';
 import * as React from 'react';
+import { Alert } from 'react-native';
 
 // no se tiene ningun usuario al inicio, por eso se deja como null
 const AuthContext = React.createContext<any>(null);
@@ -51,6 +52,15 @@ export function AuthProvider({children}:React.PropsWithChildren) {
           // falta la conexcion a la base de datos y revisar
           // en caso de que falle firebase y la base de datos, se le hara saber
           setUser(correo)
+        },
+        // nueva funcion para el ingreso de usuario apenas registrados
+        singInNewUser: (correo:string, nombre:string) => {
+          if(correo.trim() === "" ) {
+            Alert.alert("Error", "Rellene bien las casillas anteriores");
+            return;
+          }
+
+          setUser(correo);
         },
         signOut: () => {
           // funcion para eliminar la sesion del usuario
