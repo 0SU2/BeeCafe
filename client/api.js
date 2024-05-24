@@ -52,10 +52,10 @@ export const registroWithAxios = async(newEst) => {
       // agregar nuevos errores de mysql que vayan existiendo para mandar un mensaje
       // mas claro al usuario
       switch (res.data.msg) {
-        case "Duplicate entry 'or@ugto.mx' for key 'estudiantes.uni_correo'":
+        case "for key 'estudiantes.uni_correo'":
           newMessage = "Correo ya existente";
           break;
-        case "Duplicate entry 'Oscar-Rosas-Zavala ' for key 'estudiantes.uni_nombre_apePat_apeMat'":
+        case "for key 'estudiantes.uni_nombre_apePat_apeMat'":
           newMessage = "Nombre de estudiante ya existente";
           break;
       }
