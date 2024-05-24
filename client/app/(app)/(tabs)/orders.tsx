@@ -2,19 +2,28 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Button, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 
+interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+}
+
+const initialCartItems: CartItem[] = [
+  { id: 1, name: 'Producto 1', price: 10.99 },
+  { id: 2, name: 'Producto 2', price: 15.99 },
+  { id: 3, name: 'Producto 3', price: 20.99 },
+  { id: 4, name: 'Producto 4', price: 22.99 },
+  { id: 5, name: 'Producto 5', price: 5.99 },
+  { id: 6, name: 'Producto 6', price: 4.99 }
+];
+
 export default function OrderLayoutTab() {
   const [selectedTab, setSelectedTab] = useState('carrito');
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: 'Producto 1', price: 10.99 },
-    { id: 2, name: 'Producto 2', price: 15.99 },
-    { id: 3, name: 'Producto 3', price: 20.99 },
-    { id: 4, name: 'Producto 4', price: 22.99 },
-    { id: 5, name: 'Producto 5', price: 5.99 },
-    { id: 6, name: 'Producto 6', price: 4.99 }
-  ]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([...initialCartItems]);
   const [orderPlaced, setOrderPlaced] = useState(false);
-  const [orderDetails, setOrderDetails] = useState([] as { id: number; name: string; price: number }[]);
+  const [orderDetails, setOrderDetails] = useState<CartItem[]>([]);
   const [showDeleteIcons, setShowDeleteIcons] = useState(true);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   const handleTabChange = (tab: string) => {
     setSelectedTab(tab);
@@ -32,17 +41,25 @@ export default function OrderLayoutTab() {
     setShowDeleteIcons(false); // Ocultar los íconos de eliminar al realizar el pedido
   };
 
-  const cancelOrder = () => {
-    setOrderPlaced(false)
-    setShowDeleteIcons(true); // Mostrar los íconos de eliminar nuevamente al cancelar el pedido
+  const resetOrderState = () => {
+    setOrderPlaced(false);
+    setPaymentSuccess(false);
+    setCartItems([...initialCartItems]); // Restaurar los ítems originales
+    setShowDeleteIcons(true); // Mostrar los íconos de eliminar nuevamente
   };
 
-  const [paymentSuccess, setPaymentSuccess] = useState(false)
-  const payOrder = () => {
+  const cancelOrder = () => {
+    setTimeout(() => {
+      resetOrderState();
+    }, 0);
+  };
 
-    // Lógica para pagar el pedido
-    setPaymentSuccess(true)
-    setShowDeleteIcons(true); // Mostrar los íconos de eliminar nuevamente al pagar el pedido
+  const payOrder = () => {
+    setPaymentSuccess(true);
+
+    setTimeout(() => {
+      resetOrderState();
+    }, 3000);
   };
 
   return (
@@ -83,28 +100,29 @@ export default function OrderLayoutTab() {
       ) : (
         <ScrollView style={styles.orderDetails}>
           {orderPlaced ? (
-          <View style={styles.orderCard}>
-            <Text style={styles.orderTitle}>Detalles del Pedido</Text>
-            {orderDetails.map(item => (
-              <View key={item.id} style={styles.orderItem}>
-                <Text>{item.name}</Text>
-                <Text>Precio: ${item.price}</Text>
-              </View>
-            ))}
+            <View style={styles.orderCard}>
+              <Text style={styles.orderTitle}>Detalles del Pedido</Text>
+              {orderDetails.map(item => (
+                <View key={item.id} style={styles.orderItem}>
+                  <Text>{item.name}</Text>
+                  <Text>Precio: ${item.price}</Text>
+                </View>
+              ))}
               <Text style={styles.total}>Total: ${orderDetails.reduce((total, item) => total + item.price, 0).toFixed(2)}</Text>
-              <View style={styles.orderActions}></View>
-            <View style={styles.orderActions}>
-              <Button title="Cancelar Pedido" onPress={cancelOrder} color={"red"} />
+              <View style={styles.orderActions}>
+                {!paymentSuccess && (
+                  <Button title="Cancelar Pedido" onPress={cancelOrder} color={"red"} />
+                )}
                 {!paymentSuccess ? (
-              <Button title="Pagar Pedido" onPress={payOrder} color={"green"}/>
+                  <Button title="Pagar Pedido" onPress={payOrder} color={"green"} />
                 ) : (
-              <View style={styles.paymentSuccess}>
-                  <FontAwesome5 name="check-circle" size={24} color="green" />
-                  <Text style={styles.paymentSuccessText}>Pago Exitoso</Text>
+                  <View style={styles.paymentSuccess}>
+                    <FontAwesome5 name="check-circle" size={24} color="green" />
+                    <Text style={styles.paymentSuccessText}>Pago Exitoso</Text>
+                  </View>
+                )}
               </View>
-              )}
             </View>
-          </View>
           ) : (
             <Text style={styles.noOrderText}>No se ha realizado ningún pedido</Text>
           )}
@@ -208,4 +226,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 20,
   },
-})
+});
