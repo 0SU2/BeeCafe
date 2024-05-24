@@ -5,19 +5,9 @@ import morgan from  "morgan";
 import EstRoutes from './routes/registrarEst.js'; 
 
 const app = express();
-//const corsOption = {
-//    origin: "http://127.0.0.1:8080",
-//    methods: ["POST", "GET"],
-//    Credentials: true,
-//}
 
-//const corsOp = {
-//    origin: "http://192.168.1.2:8081",
-//    methods: ["POST", "GET"],
-//    Credentials: true,
-//}
-
-app.set("port",8080);
+// el puerto puede varear, cambiarlo en caso de ser necesario
+app.set("port",3000);
 
 app.use(express.json()); 
 //app.use(cors(corsOp));

@@ -1,4 +1,7 @@
-const API = "http://10.0.2.2:8080/registro";
+import axios from 'axios';
+import { IPV4_OWN, PORT_SERVER } from '@env';
+
+const API = "http://10.0.2.2:3000/estudiantes";
 
 console.log('ENTRA API');
 
@@ -19,18 +22,6 @@ export const getEst = async () => {
 
 //recibe el objeto con datos del registro 
 export const postEst = async (newEst) =>{
-    //fetch('http://10.0.2.2:8080/registro', {
-    //    method:"POST", 
-    //    headers: {
-    //        Accept:"application/json",
-    //        "Content-Type":"application/json"
-    //    },
-    //    body: JSON.stringify(newEst), //convierte el objeto a string 
-    //})
-    //.then(response => response.json())
-    //.then(response => console.log(response))
-    //.catch(err => console.error(err));
-
   console.log('ENTRA POSTEST');
   try{
       console.log('ENTRA TRY');
@@ -45,3 +36,37 @@ export const postEst = async (newEst) =>{
       console.log(err,'Error posEst');
   }
 } 
+
+export const registroWithAxios = async(newEst) => {
+  // primero checamos si el correo es valido de la ugto con regex
+  const regex = new RegExp('[2a-z]+[.]+.+@ugto+\.[a-z]{2,3}');
+  
+  // si el correo no es valido regresamos
+  if(regex.test(newEst.correo)) {
+    console.log("ENTRA POSTEST WITH AXIOS");
+                                  // ipv4 from wifi connected and current port from the server
+    const res = await axios.post(`http://${IPV4_OWN}:${PORT_SERVER}/registro`,{newEst});
+    
+    if(!res.data.succes) {
+      let newMessage;
+      // agregar nuevos errores de mysql que vayan existiendo para mandar un mensaje
+      // mas claro al usuario
+      switch (res.data.msg) {
+        case "for key 'estudiantes.uni_correo'":
+          newMessage = "Correo ya existente";
+          break;
+        case "for key 'estudiantes.uni_nombre_apePat_apeMat'":
+          newMessage = "Nombre de estudiante ya existente";
+          break;
+      }
+      res.data.msg = newMessage;
+    }
+
+    return res.data
+  }
+
+  const mensage = "Correo Invalido"
+
+  return {"success" : false, "msg": mensage}
+  
+}
