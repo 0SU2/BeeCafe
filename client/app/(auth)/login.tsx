@@ -32,7 +32,7 @@ export default function App() {
     //postEst(input.nombre,input.apePaterno,input.apeMaterno,input.correo,input.contrasena);
     console.log(input);
     
-    postEst(forms);
+    postEst(input);
 
   }
   const abrirTarjeta = () => {
