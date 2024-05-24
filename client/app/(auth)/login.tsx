@@ -4,6 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
 import { useAuth } from '../../modules/context/auth';
 import Ionicons from '@expo/vector-icons/Ionicons';
+
+
 import { getEst, postEst, registroWithAxios} from '../../api';
 import { useTogglePasswordVisibility } from '../../modules/components/togglePassword';
 import { registerUser } from '../../modules/firebase/fireBaseConfig';
@@ -96,13 +98,7 @@ export default function App() {
           onChangeText={(text) => RegValues("contrasena",text)}
           placeholder="Contraseña" 
         />
-        <Pressable onPress={handlePasswordVisibility} >
-          <Ionicons
-            name={rightIcon}
-            color="#000"
-            size={20}
-          />
-        </Pressable>
+
       </View>
 
       <View style={styles.button}>
