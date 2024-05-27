@@ -4,7 +4,6 @@ import { IPV4_OWN, PORT_SERVER } from '@env';
 const API = "http://10.0.2.2:3000/estudiantes";
 
 console.log('ENTRA API');
-console.log(IPV4_OWN);
 
 export const getEst = async () => {
     console.log("entra getEst")    
@@ -45,8 +44,13 @@ export const registroWithAxios = async(newEst) => {
 
   // si el correo no es valido regresamos
   if(regex.test(newEst.correo)) {
+<<<<<<< HEAD
     let tu = IPV4_OWN;
     let ne = IPV4_OWN; // agrege esta variable a la url, si ocurre algun error, cambiala por la variable tu
+=======
+    let tu = process.env.EXPO_PUBLIC_IPV4_OWN;
+    console.log(tu);
+>>>>>>> master
     console.log("ENTRA POSTEST WITH AXIOS");
                                   // ipv4 from wifi connected and current port from the server
     const res = await axios.post(`http://${ne}:${PORT_SERVER}/registro`,{newEst});

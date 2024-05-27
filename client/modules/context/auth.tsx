@@ -14,7 +14,7 @@ export function AuthProvider({children}:React.PropsWithChildren) {
   
   const rootSegment = useSegments()[0];
   const router = useRouter(); // nos permite navegar entre paginas
-  const [user, setUser] = React.useState<string | undefined>("");
+  const [user, setUser] = React.useState<string | undefined>("or.rosaszavala@ugto.mx");
   
   // usar un useEffect para revisar si tenemos un usuario al cargar la pagina por primera vez
   React.useEffect(() => {

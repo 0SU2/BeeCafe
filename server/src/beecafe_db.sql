@@ -80,6 +80,15 @@ CREATE TABLE IF NOT EXISTS menu (
 
 INSERT INTO menu(men_platillo, men_descripcion, men_tipo, men_categoria, men_precio, men_disponible, men_ingredientes, men_tiempo_preparacion)
 	VALUES('Pozole con Salchicha', 'pozole con salchicha', 'Comida', 'Sopas', 85.00, 1, 'Salchicha, maíz, chile, cebolla, ajo', 45);
+INSERT INTO menu(men_platillo, men_descripcion, men_tipo, men_categoria, men_precio, men_disponible, men_ingredientes, men_tiempo_preparacion)
+	VALUES('Papas fritas', 'deliciosas papas fritas', 'Comida', 'Frituras', 100.00, 10, 'Papas, aceite, sal', 100);
+INSERT INTO menu(men_platillo, men_descripcion, men_tipo, men_categoria, men_precio, men_disponible, men_ingredientes, men_tiempo_preparacion)
+	VALUES('Cerezas', 'cerezas en almbibar', 'Comida', 'Frutas', 200.00, 5, 'Cerezas', 100);
+
+INSERT INTO menu(men_platillo, men_descripcion, men_tipo, men_categoria, men_precio, men_disponible, men_ingredientes, men_tiempo_preparacion)
+	VALUES('Cerveza', 'cerveza bien fria', 'Bebida' ,'Alcohol', 400.00, 1, 'Agua', 1);
+
+
 
 
 CREATE TABLE IF NOT EXISTS carrito(
