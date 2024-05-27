@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, View, Text, Modal } from 'react-native';
+import { ScrollView, StyleSheet, View, Text, Modal, Alert } from 'react-native';
 import { Card, Button, Portal, Provider, Paragraph } from 'react-native-paper';
+
+import axios from 'axios';
 
 interface ArticuloComida {
   id: number;
@@ -9,54 +11,19 @@ interface ArticuloComida {
   precio: string;
 }
 
-const listaComida: ArticuloComida[] = [
-  {
-    id: 1,
-    titulo: "Hamburguesa con Queso",
-    descripcion: "Hamburguesa de res con queso cheddar y salsa especial.",
-    precio: "$9.99",
-  },
-  {
-    id: 2,
-    titulo: "Pizza Margarita",
-    descripcion: "Clásica pizza con tomate y queso mozzarella.",
-    precio: "$8.99",
-  },
-  {
-    id: 3,
-    titulo: "Sándwich Club",
-    descripcion: "Sándwich con jamón, pavo, tocino y queso.",
-    precio: "$7.99",
-  },
-];
+interface myComifa {
+  men_id: number;
+  men_platillo: string;
+  men_descripcion: string;
+  men_precio: number;
+}
 
-const listaPlatillos: ArticuloComida[] = [
-  {
-    id: 1,
-    titulo: "Ensalada César",
-    descripcion: "Ensalada fresca con pollo, crutones y queso parmesano.",
-    precio: "$7.99",
-  },
-  {
-    id: 2,
-    titulo: "Tacos al Pastor",
-    descripcion: "Tacos con carne de cerdo marinada y piña.",
-    precio: "$6.99",
-  },
-  {
-    id: 3,
-    titulo: "Sopa de Tortilla",
-    descripcion: "Sopa tradicional con tiras de tortilla y aguacate.",
-    precio: "$5.99",
-  },
-];
-
-const TarjetaComida: React.FC<{ comida: ArticuloComida, onAgregarAlCarrito: (id: number) => void, onMostrarDetalles: (comida: ArticuloComida) => void }> = ({ comida, onAgregarAlCarrito, onMostrarDetalles }) => (
+const TarjetaComidaMyComida: React.FC<{ comida: myComifa, onAgregarAlCarrito: (id: number) => void, onMostrarDetalles: (comida: myComifa) => void }> = ({ comida, onAgregarAlCarrito, onMostrarDetalles }) => (
   <Card style={styles.card}>
-    <Card.Title title={comida.titulo} subtitle={comida.precio} />
+    <Card.Title title={comida.men_platillo} subtitle={comida.men_precio} />
     <Card.Cover source={{ uri: 'https://picsum.photos/700' }} style={styles.cardImage} />
     <Card.Actions>
-      <Button mode="contained" onPress={() => onAgregarAlCarrito(comida.id)} color="blue">
+      <Button mode="contained" onPress={() => onAgregarAlCarrito(comida.men_id)} color="blue">
         Añadir al Carrito
       </Button>
       <Button mode="outlined" onPress={() => onMostrarDetalles(comida)} color="blue">
@@ -66,14 +33,14 @@ const TarjetaComida: React.FC<{ comida: ArticuloComida, onAgregarAlCarrito: (id:
   </Card>
 );
 
-const ModalDetallesComida: React.FC<{ visible: boolean, comida: ArticuloComida | null, onCerrar: () => void }> = ({ visible, comida, onCerrar }) => (
+const ModalDetallesComida: React.FC<{ visible: boolean, comida: myComifa | null, onCerrar: () => void }> = ({ visible, comida, onCerrar }) => (
   <Portal>
     <Modal visible={visible} animationType="slide" transparent={true}>
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalTitulo}>{comida?.titulo}</Text>
-          <Paragraph style={styles.modalDescripcion}>{comida?.descripcion}</Paragraph>
-          <Text style={styles.modalPrecio}>{comida?.precio}</Text>
+          <Text style={styles.modalTitulo}>{comida?.men_platillo}</Text>
+          <Paragraph style={styles.modalDescripcion}>{comida?.men_descripcion}</Paragraph>
+          <Text style={styles.modalPrecio}>${comida?.men_precio}</Text>
           <Button mode="contained" onPress={onCerrar} style={styles.botonCerrar}>
             Cerrar
           </Button>
@@ -84,15 +51,42 @@ const ModalDetallesComida: React.FC<{ visible: boolean, comida: ArticuloComida |
 );
 
 export default function PantallaComida() {
-  const [comidaSeleccionada, setComidaSeleccionada] = useState<ArticuloComida | null>(null);
+  const [comidaSeleccionada, setComidaSeleccionada] = useState<myComifa | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [pestanaActiva, setPestanaActiva] = useState<'comida' | 'platillos' | 'bebidas'>('comida');
+  const [ posts, setPosts ] = useState<myComifa[]>([]);
+
+  React.useEffect(() => {
+    if(pestanaActiva == "comida") {
+      axios.get(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/menuComida`)
+      .then(response => {
+        setPosts(response.data)
+      })
+    }
+ 
+    if(pestanaActiva == "platillos") {
+      axios.get(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/menuPlatillos`)
+      .then(response => {
+        setPosts(response.data)
+      })
+    }
+
+    if(pestanaActiva == 'bebidas') {
+      axios.get(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/menuBebidas`)
+      .then(response => {
+        setPosts(response.data)
+      })
+    }
+    return console.log("se acabo");
+    
+  }, [pestanaActiva])
 
   const handleAgregarAlCarrito = (id: number) => {
     console.log(`Producto ${id} añadido al carrito`);
-  };
+    Alert.alert("Agregado al carrito", id.toString())
+  }
 
-  const handleMostrarDetalles = (comida: ArticuloComida) => {
+  const handleMostrarDetalles = (comida: myComifa) => {
     setComidaSeleccionada(comida);
     setModalVisible(true);
   };
@@ -102,26 +96,34 @@ export default function PantallaComida() {
     setComidaSeleccionada(null);
   };
 
+
   const renderizarContenido = () => {
     switch (pestanaActiva) {
       case 'comida':
         return (
           <ScrollView style={styles.scrollView}>
-            {listaComida.map(comida => (
-              <TarjetaComida key={comida.id} comida={comida} onAgregarAlCarrito={handleAgregarAlCarrito} onMostrarDetalles={handleMostrarDetalles} />
+            {posts.map(comida => (
+              <TarjetaComidaMyComida key={comida.men_id} comida={comida} onAgregarAlCarrito={handleAgregarAlCarrito} onMostrarDetalles={handleMostrarDetalles} />
             ))}
           </ScrollView>
         );
       case 'platillos':
+
         return (
           <ScrollView style={styles.scrollView}>
-            {listaPlatillos.map(comida => (
-              <TarjetaComida key={comida.id} comida={comida} onAgregarAlCarrito={handleAgregarAlCarrito} onMostrarDetalles={handleMostrarDetalles} />
+            {posts.map(comida => (
+              <TarjetaComidaMyComida key={comida.men_id} comida={comida} onAgregarAlCarrito={handleAgregarAlCarrito} onMostrarDetalles={handleMostrarDetalles} />
             ))}
           </ScrollView>
         );
       case 'bebidas':
-        return <Text style={styles.textoPlaceholder}>Contenido de "Bebidas"</Text>;
+        return (
+          <ScrollView style={styles.scrollView}>
+            {posts.map(comida => (
+              <TarjetaComidaMyComida key={comida.men_id} comida={comida} onAgregarAlCarrito={handleAgregarAlCarrito} onMostrarDetalles={handleMostrarDetalles} />
+            ))}
+          </ScrollView>
+        );
       default:
         return null;
     }
@@ -134,21 +136,27 @@ export default function PantallaComida() {
         <View style={styles.tabContainer}>
           <Button
             mode={pestanaActiva === 'comida' ? 'contained' : 'outlined'}
-            onPress={() => setPestanaActiva('comida')}
+            onPress={() => {
+              setPestanaActiva('comida')
+            }}
             style={styles.tabButton}
           >
             Comida
           </Button>
           <Button
             mode={pestanaActiva === 'platillos' ? 'contained' : 'outlined'}
-            onPress={() => setPestanaActiva('platillos')}
+            onPress={() => {
+              setPestanaActiva('platillos')
+            }}
             style={styles.tabButton}
           >
             Platillos
           </Button>
           <Button
             mode={pestanaActiva === 'bebidas' ? 'contained' : 'outlined'}
-            onPress={() => setPestanaActiva('bebidas')}
+            onPress={() => {
+              setPestanaActiva('bebidas')
+            }}
             style={styles.tabButton}
           >
             Bebidas

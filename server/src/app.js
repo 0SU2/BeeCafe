@@ -3,6 +3,8 @@ import cors from "cors";
 import morgan from  "morgan"; 
 
 import EstRoutes from './routes/registrarEst.js'; 
+import router from "./routes/menuEst.js";
+import pedidosRouter from "./routes/pedidosEst.js";
 
 const app = express();
 
@@ -15,6 +17,8 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(EstRoutes); 
+app.use(router);
+app.use(pedidosRouter)
 
 //console.log(EstRoutes);
 

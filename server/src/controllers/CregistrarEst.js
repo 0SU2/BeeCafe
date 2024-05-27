@@ -2,10 +2,7 @@ import {connDB} from "../database.js";
 
 
 export const getEstudiantes = async (req,res) =>{
-    const conn =await connDB(); 
-    const [rows] = await conn.execute('SELECT * FROM estudiantes');
-    console.log(rows);
-    res.json(rows);
+    console.log(req);
 };
 
 
