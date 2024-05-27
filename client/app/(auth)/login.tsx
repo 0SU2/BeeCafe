@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Modal, Image, Button, Pressable, Alert} from 'react-native';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Modal, Image, Button, Pressable, Alert} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
 import { useAuth } from '../../modules/context/auth';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { getEst, postEst, registroWithAxios} from '../../api';
 import { useTogglePasswordVisibility } from '../../modules/components/togglePassword';
-import { registerUser } from '../../modules/firebase/fireBaseConfig';
 import { registerUser } from '../../modules/firebase/fireBaseConfig';
 
 export default function App() {
@@ -27,32 +25,9 @@ export default function App() {
   });
 
   // funcion signIn para la validacion del usuario y cambiarlo a la view 
-  // funcion signIn para la validacion del usuario y cambiarlo a la view 
   // del menu
   const { signIn, singInNewUser } =  useAuth();  
   
-  const loginUser = async() => {
-    // login para usuario, primero revisamos en la base de datos que exista
-  }
-
-  const registro = async() => {
-    const response = await registroWithAxios(input);
-    console.log(response);
-    
-    if(!response.success) {
-      let responseMsg = response.msg
-      Alert.alert("Error", responseMsg);
-      return;
-    }
-
-    // ya se registro en la base de datos sql, ahora se debe ingresar en firebase
-    registerUser(input.correo, input.contrasena, input.nombre, input.apePaterno, input.apeMaterno);
-
-    Alert.alert("Correcto", "Registro satisfactorio");
-
-    singInNewUser(input.correo, input.nombre);
-    return;
-  const { signIn, singInNewUser } =  useAuth();  
   
   const loginUser = async() => {
     // login para usuario, primero revisamos en la base de datos que exista
@@ -106,7 +81,6 @@ export default function App() {
       
       <View style={styles.inputsContainer} >
         <TextInput 
-          autoCapitalize={'none'}
           autoCapitalize={'none'}
           value={input.correo}
           onChangeText={(text) => RegValues("correo", text)}
@@ -174,7 +148,6 @@ export default function App() {
               <TextInput
                 style={styles.textInput}
                 placeholder="Nombre"
-                placeholder="Nombre"
                 value={input.nombre}
                 onChangeText={ (text) => RegValues("nombre",text) }
               />
@@ -194,7 +167,6 @@ export default function App() {
                 style={styles.textInput}
                 placeholder="Correo"
                 value={input.correo}
-                autoCapitalize={'none'}
                 autoCapitalize={'none'}
                 onChangeText={ (text) => RegValues("correo",text) }
               />
