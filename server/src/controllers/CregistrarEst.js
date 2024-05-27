@@ -32,6 +32,7 @@ export const registrarEstudiante = async (req,res) =>{
     }
 }; 
 
+//export const existeEstudiante = async
 export const getText = (req,res) =>{
     res.send("msj");
 };
