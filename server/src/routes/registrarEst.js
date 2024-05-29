@@ -4,7 +4,8 @@ import { Router } from 'express';
 
 import { registrarEstudiante,
             getText,
-            getEstudiantes
+            getEstudiantes,
+            loginEstudiante
        } from '../controllers/CregistrarEst.js';
 
 const router = Router();
@@ -12,5 +13,6 @@ const router = Router();
 router.post('/registro',registrarEstudiante);
 router.get('/tasks',getText);
 router.get('/estudiantes',getEstudiantes);
+router.get('/inicioSession', loginEstudiante)
 
 export default router;

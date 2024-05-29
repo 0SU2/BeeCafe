@@ -1,6 +1,7 @@
 import { useRouter, useSegments } from 'expo-router';
 import * as React from 'react';
 import { Alert } from 'react-native';
+import { comidaCafeteria } from '../../types/userTypes';
 
 // no se tiene ningun usuario al inicio, por eso se deja como null
 const AuthContext = React.createContext<any>(null);
@@ -10,11 +11,15 @@ export function useAuth() {
   return React.useContext(AuthContext)
 }
 
+let data:(comidaCafeteria[]) = []
+
 export function AuthProvider({children}:React.PropsWithChildren) {
   
   const rootSegment = useSegments()[0];
   const router = useRouter(); // nos permite navegar entre paginas
   const [user, setUser] = React.useState<string | undefined>("or.rosaszavala@ugto.mx");
+  const [idUser, setIdUser] = React.useState<number>();
+  const [cartItems, setCartItems] = React.useState<comidaCafeteria[]>([])
   
   // usar un useEffect para revisar si tenemos un usuario al cargar la pagina por primera vez
   React.useEffect(() => {
@@ -38,7 +43,7 @@ export function AuthProvider({children}:React.PropsWithChildren) {
         params: {user}
       });
     }
-  }, [user, rootSegment]);
+  }, [user, rootSegment, cartItems]);
   return(
     <AuthContext.Provider
       value={{
@@ -65,6 +70,21 @@ export function AuthProvider({children}:React.PropsWithChildren) {
         signOut: () => {
           // funcion para eliminar la sesion del usuario
           setUser("");
+        },
+        addItemsCart: (items:comidaCafeteria) => {
+          data.push({...items});
+          setCartItems(data);
+        },
+        removeItemCart: (newItems:comidaCafeteria[]) => {
+          data = newItems;
+          setCartItems(newItems)
+        },
+        deleteAllItemsCart: (newItems:comidaCafeteria[]) => {
+          data = newItems
+          setCartItems(data)
+        },
+        getAddedItemsCart: () => {
+          return cartItems;
         }
       }}
     >

@@ -2,49 +2,50 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Button, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 
+import { useAuth } from '../../../modules/context/auth';
+import { comidaCafeteria } from '../../../types/userTypes';
+
 interface CartItem {
   id: number;
   name: string;
   price: number;
 }
 
-const initialCartItems: CartItem[] = [
-  { id: 1, name: 'Producto 1', price: 10.99 },
-  { id: 2, name: 'Producto 2', price: 15.99 },
-  { id: 3, name: 'Producto 3', price: 20.99 },
-  { id: 4, name: 'Producto 4', price: 22.99 },
-  { id: 5, name: 'Producto 5', price: 5.99 },
-  { id: 6, name: 'Producto 6', price: 4.99 }
-];
-
 export default function OrderLayoutTab() {
   const [selectedTab, setSelectedTab] = useState('carrito');
-  const [cartItems, setCartItems] = useState<CartItem[]>([...initialCartItems]);
   const [orderPlaced, setOrderPlaced] = useState(false);
-  const [orderDetails, setOrderDetails] = useState<CartItem[]>([]);
+  const [orderDetails, setOrderDetails] = useState<comidaCafeteria[]>([]);
   const [showDeleteIcons, setShowDeleteIcons] = useState(true);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+  const [cartItemsFood, setCartItemsFood] = useState<comidaCafeteria[]>([])
+  const { getAddedItemsCart, removeItemCart, deleteAllItemsCart } = useAuth();
+  const itemsCart = getAddedItemsCart();
+  
+  React.useEffect(() => {
+    setCartItemsFood(getAddedItemsCart())
+    
+  }, [itemsCart]);
 
   const handleTabChange = (tab: string) => {
     setSelectedTab(tab);
   };
 
   const removeItem = (itemId: number) => {
-    const updatedCartItems = cartItems.filter(item => item.id !== itemId);
-    setCartItems(updatedCartItems);
+    const updateCartItem = cartItemsFood.filter(item => item.men_id !== itemId);
+    removeItemCart(updateCartItem)
   };
 
   const placeOrder = () => {
     setOrderPlaced(true);
-    setOrderDetails([...cartItems]);
-    setCartItems([]);
+    setOrderDetails([...cartItemsFood]);
+    setCartItemsFood([]);
     setShowDeleteIcons(false); // Ocultar los íconos de eliminar al realizar el pedido
   };
 
   const resetOrderState = () => {
     setOrderPlaced(false);
     setPaymentSuccess(false);
-    setCartItems([...initialCartItems]); // Restaurar los ítems originales
     setShowDeleteIcons(true); // Mostrar los íconos de eliminar nuevamente
   };
 
@@ -55,11 +56,13 @@ export default function OrderLayoutTab() {
   };
 
   const payOrder = () => {
-    setPaymentSuccess(true);
+    // hacer una peticion post al mysql con la informacion del usuario
 
+    setPaymentSuccess(true);
     setTimeout(() => {
       resetOrderState();
     }, 3000);
+    deleteAllItemsCart([]);
   };
 
   return (
@@ -80,21 +83,21 @@ export default function OrderLayoutTab() {
       {selectedTab === 'carrito' ? (
         <View style={styles.cartContent}>
           <FlatList
-            data={cartItems}
+            data={cartItemsFood}
             renderItem={({ item }) => (
               <View style={styles.card}>
-                <Text>{item.name}</Text>
-                <Text>Precio: ${item.price}</Text>
+                <Text>{item.men_platillo}</Text>
+                <Text>Precio: ${item.men_precio.toString()}</Text>
                 {showDeleteIcons && (
-                  <TouchableOpacity onPress={() => removeItem(item.id)}>
+                  <TouchableOpacity onPress={() => removeItem(item.men_id)}>
                     <FontAwesome5 name="trash-alt" size={24} color="red" />
                   </TouchableOpacity>
                 )}
               </View>
             )}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item.men_id.toString()}
           />
-          <Text style={styles.total}>Total: ${cartItems.reduce((total, item) => total + item.price, 0).toFixed(2)}</Text>
+          <Text style={styles.total}>Total: ${cartItemsFood.reduce((total, item) => total + parseFloat(item.men_precio), 0).toFixed(2)}</Text>
           <Button title="Realizar Pedido" onPress={placeOrder} />
         </View>
       ) : (
@@ -103,12 +106,12 @@ export default function OrderLayoutTab() {
             <View style={styles.orderCard}>
               <Text style={styles.orderTitle}>Detalles del Pedido</Text>
               {orderDetails.map(item => (
-                <View key={item.id} style={styles.orderItem}>
-                  <Text>{item.name}</Text>
-                  <Text>Precio: ${item.price}</Text>
+                <View key={item.men_id} style={styles.orderItem}>
+                  <Text>{item.men_platillo}</Text>
+                  <Text>Precio: ${item.men_precio}</Text>
                 </View>
               ))}
-              <Text style={styles.total}>Total: ${orderDetails.reduce((total, item) => total + item.price, 0).toFixed(2)}</Text>
+              <Text style={styles.total}>Total: ${orderDetails.reduce((total, item) => total + parseFloat(item.men_precio), 0).toFixed(2)}</Text>
               <View style={styles.orderActions}>
                 {!paymentSuccess && (
                   <Button title="Cancelar Pedido" onPress={cancelOrder} color={"red"} />

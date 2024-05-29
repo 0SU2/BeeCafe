@@ -1,29 +1,17 @@
-import React, { useState } from 'react';
+import React, { ComponentState, useState } from 'react';
 import { ScrollView, StyleSheet, View, Text, Modal, Alert } from 'react-native';
 import { Card, Button, Portal, Provider, Paragraph } from 'react-native-paper';
 
 import axios from 'axios';
+import { comidaCafeteria } from '../../../types/userTypes';
+import { useAuth } from '../../../modules/context/auth';
 
-interface ArticuloComida {
-  id: number;
-  titulo: string;
-  descripcion: string;
-  precio: string;
-}
-
-interface myComifa {
-  men_id: number;
-  men_platillo: string;
-  men_descripcion: string;
-  men_precio: number;
-}
-
-const TarjetaComidaMyComida: React.FC<{ comida: myComifa, onAgregarAlCarrito: (id: number) => void, onMostrarDetalles: (comida: myComifa) => void }> = ({ comida, onAgregarAlCarrito, onMostrarDetalles }) => (
+const TarjetaComidaMyComida: React.FC<{ comida: comidaCafeteria, onAgregarAlCarrito: (comida:comidaCafeteria) => void, onMostrarDetalles: (comida: comidaCafeteria) => void }> = ({ comida, onAgregarAlCarrito, onMostrarDetalles }) => (
   <Card style={styles.card}>
     <Card.Title title={comida.men_platillo} subtitle={comida.men_precio} />
     <Card.Cover source={{ uri: 'https://picsum.photos/700' }} style={styles.cardImage} />
     <Card.Actions>
-      <Button mode="contained" onPress={() => onAgregarAlCarrito(comida.men_id)} color="blue">
+      <Button mode="contained" onPress={() => onAgregarAlCarrito(comida)} color="blue">
         Añadir al Carrito
       </Button>
       <Button mode="outlined" onPress={() => onMostrarDetalles(comida)} color="blue">
@@ -33,7 +21,7 @@ const TarjetaComidaMyComida: React.FC<{ comida: myComifa, onAgregarAlCarrito: (i
   </Card>
 );
 
-const ModalDetallesComida: React.FC<{ visible: boolean, comida: myComifa | null, onCerrar: () => void }> = ({ visible, comida, onCerrar }) => (
+const ModalDetallesComida: React.FC<{ visible: boolean, comida: comidaCafeteria | null, onCerrar: () => void }> = ({ visible, comida, onCerrar }) => (
   <Portal>
     <Modal visible={visible} animationType="slide" transparent={true}>
       <View style={styles.modalContainer}>
@@ -51,10 +39,11 @@ const ModalDetallesComida: React.FC<{ visible: boolean, comida: myComifa | null,
 );
 
 export default function PantallaComida() {
-  const [comidaSeleccionada, setComidaSeleccionada] = useState<myComifa | null>(null);
+  const [comidaSeleccionada, setComidaSeleccionada] = useState<comidaCafeteria | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [pestanaActiva, setPestanaActiva] = useState<'comida' | 'platillos' | 'bebidas'>('comida');
-  const [ posts, setPosts ] = useState<myComifa[]>([]);
+  const [ posts, setPosts ] = useState<comidaCafeteria[]>([]);
+  const { addItemsCart } = useAuth();
 
   React.useEffect(() => {
     if(pestanaActiva == "comida") {
@@ -77,16 +66,20 @@ export default function PantallaComida() {
         setPosts(response.data)
       })
     }
+    console.log(posts);
+    
     return console.log("se acabo");
     
   }, [pestanaActiva])
 
-  const handleAgregarAlCarrito = (id: number) => {
-    console.log(`Producto ${id} añadido al carrito`);
-    Alert.alert("Agregado al carrito", id.toString())
+  const handleAgregarAlCarrito = (comida: comidaCafeteria) => {
+    addItemsCart(comida)
+
+    // mandar una alerta despues de que se haya agregado el platillo que sea
+    // Alert.alert("Agregaste al carrito: ", comida.men_platillo)
   }
 
-  const handleMostrarDetalles = (comida: myComifa) => {
+  const handleMostrarDetalles = (comida: comidaCafeteria) => {
     setComidaSeleccionada(comida);
     setModalVisible(true);
   };

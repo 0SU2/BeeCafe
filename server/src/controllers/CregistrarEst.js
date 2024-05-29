@@ -5,6 +5,22 @@ export const getEstudiantes = async (req,res) =>{
     console.log(req);
 };
 
+export const loginEstudiante = async(req, res) => {
+    try {
+        const conn = await connDB();
+        const body = req.query
+        const response = await conn.execute("SELECT * FROM estudiantes WHERE est_correo = ? AND est_contrasena = ?",
+            [body.correo, body.contrasena]
+        );
+
+        
+        res.json({"success": true })
+    } catch (error) {
+        console.log(error);
+        res.json({"success": false, "msg": error})
+    }
+}
+
 
 export const registrarEstudiante = async (req,res) =>{
     //res.send("REGISTROOO");

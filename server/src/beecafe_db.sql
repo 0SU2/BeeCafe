@@ -35,33 +35,6 @@ CREATE TABLE IF NOT EXISTS personal(
 INSERT INTO personal(per_nombre,per_apePat,per_apeMat,per_correo,per_contrasena)
 	VALUES ('Amanda','Perez','Costa','cafeteria@ugto.mx','1234');
 
-/*
-CREATE TABLE IF NOT EXISTS tipoUsuario(
-	tpu_id INT NOT NULL AUTO_INCREMENT,
-    tpu_est_id INT NOT NULL,
-    tpu_per_id INT NOT NULL,
-    tpu_tipo ENUM('Usuario','Personal'),
-    
-    PRIMARY KEY (tpu_id),
-    
-    INDEX idx_tipo(tpu_tipo),
-    
-    CONSTRAINT fk_tpu_est_id
-		FOREIGN KEY (tpu_est_id)
-        REFERENCES estudiantes(est_id)
-        
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-        
-	CONSTRAINT fk_tpu_per_id
-		FOREIGN KEY (tpu_per_id)
-        REFERENCES personal(per_id)
-        
-        ON DELETE CASCADE 
-        ON UPDATE CASCADE
-);
-*/
-
 
 CREATE TABLE IF NOT EXISTS menu (
     men_id INT NOT NULL AUTO_INCREMENT,
@@ -69,7 +42,7 @@ CREATE TABLE IF NOT EXISTS menu (
     men_descripcion VARCHAR(255),
     men_tipo ENUM('Desayuno', 'Comida', 'Preparado', 'Bebida') NOT NULL,
     men_categoria VARCHAR(50),
-    men_precio DECIMAL(10, 2) NOT NULL,
+    men_precio DECIMAL(10,2) NOT NULL,
     men_disponible BOOLEAN NOT NULL DEFAULT TRUE,
     men_ingredientes TEXT,
     men_tiempo_preparacion INT,

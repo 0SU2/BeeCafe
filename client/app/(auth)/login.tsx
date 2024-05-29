@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
 import { useAuth } from '../../modules/context/auth';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { getEst, postEst, registroWithAxios} from '../../api';
+import { getEst, postEst, registroWithAxios, sesionWithAxios} from '../../api';
 import { useTogglePasswordVisibility } from '../../modules/components/togglePassword';
 import { registerUser } from '../../modules/firebase/fireBaseConfig';
 
@@ -31,6 +31,9 @@ export default function App() {
   
   const loginUser = async() => {
     // login para usuario, primero revisamos en la base de datos que exista
+    const response = await sesionWithAxios(input)
+    console.log(response);
+    
   }
 
   const registro = async() => {
@@ -48,7 +51,7 @@ export default function App() {
 
     Alert.alert("Correcto", "Registro satisfactorio");
 
-    singInNewUser(input.correo, input.nombre);
+    singInNewUser(input.correo);
     return;
   }
   const abrirTarjeta = () => {
@@ -111,9 +114,7 @@ export default function App() {
           colors={['#4c669f', '#3b5998', '#192f6a']}
           style={styles.gradient}>
           <Button
-            onPress={() => {
-              signIn(input.correo, input.contrasena)
-            }}
+            onPress={loginUser}
             title="Iniciar Sesión"
             color="#ffffff"
           />
