@@ -45,10 +45,12 @@ export const registroWithAxios = async(newEst) => {
   // si el correo no es valido regresamos
   if(regex.test(newEst.correo)) {
     let tu = process.env.EXPO_PUBLIC_IPV4_OWN;
+    let cn = IPV4_OWN;
+    console.log(cn);
     console.log(tu);
     console.log("ENTRA POSTEST WITH AXIOS");
                                   // ipv4 from wifi connected and current port from the server
-    const res = await axios.post(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.PORT_SERVER}/registro`,{newEst});
+    const res = await axios.post(`http://${cn}:${PORT_SERVER}/registro`,{newEst});
     console.log("siguiente de res")
     if(!res.data.succes) {
       console.log("entra if")
