@@ -18,7 +18,8 @@ INSERT INTO estudiantes(est_nombre,est_apePat,est_apeMat,est_correo,est_contrase
 	VALUES ('antonio','castillo','quintanilla','correo','1234');
 INSERT INTO estudiantes(est_nombre,est_apePat,est_apeMat,est_correo,est_contrasena)
 	VALUES ('Osvaldo','Oliveira','pz','micorreo','1234');    
-
+INSERT INTO estudiantes(est_nombre,est_apePat,est_apeMat,est_correo,est_contrasena)
+	VALUES ('Oscar','Rosas','zavala','or.rosaszavala@ugto.mx','123456');    
 
 CREATE TABLE IF NOT EXISTS personal(
  per_id INT NOT NULL AUTO_INCREMENT,

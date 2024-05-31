@@ -6,7 +6,7 @@ import { useAuth } from '../../modules/context/auth';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { getEst, postEst, registroWithAxios, sesionWithAxios} from '../../api';
 import { useTogglePasswordVisibility } from '../../modules/components/togglePassword';
-import { registerUser } from '../../modules/firebase/fireBaseConfig';
+import { loginUserFirebase, registerUser } from '../../modules/firebase/fireBaseConfig';
 
 export default function App() {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } = useTogglePasswordVisibility();
@@ -30,15 +30,30 @@ export default function App() {
   
   
   const loginUser = async() => {
+    if(input.correo.trim() == "" || input.contrasena.trim() == "") {
+      Alert.alert("Error", "Rellene bien las casillas");
+      return;
+    }
     // login para usuario, primero revisamos en la base de datos que exista
     const response = await sesionWithAxios(input)
+    // if(!response.data.success) {
+    //   let message = response.data.msg;
+    //   alert(message);
+    //   return;
+    // }
+
+    // // buscamos que el usuario este registrado en el firebase
+    // const firebaseResponse = await loginUserFirebase(input.correo, input.contrasena);
+    
+    // si el usuario existe en nuestra base de datos, vamos a guardar el
+    // id en el auth para poder manipularlo en las otras vistas,
+    // esto porque el auth es una propiedad donde todos heredan sus atributos
     console.log(response);
     
   }
 
   const registro = async() => {
     const response = await registroWithAxios(input);
-    console.log(response);
     
     if(!response.success) {
       let responseMsg = response.msg
@@ -54,6 +69,7 @@ export default function App() {
     singInNewUser(input.correo);
     return;
   }
+
   const abrirTarjeta = () => {
     setMostrarTarjeta(true);
   }

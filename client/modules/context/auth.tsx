@@ -12,12 +12,13 @@ export function useAuth() {
 }
 
 let data:(comidaCafeteria[]) = []
+let nose:(object[]) = []
 
 export function AuthProvider({children}:React.PropsWithChildren) {
   
   const rootSegment = useSegments()[0];
   const router = useRouter(); // nos permite navegar entre paginas
-  const [user, setUser] = React.useState<string | undefined>("or.rosaszavala@ugto.mx");
+  const [user, setUser] = React.useState<string | undefined>("");
   const [idUser, setIdUser] = React.useState<number>();
   const [cartItems, setCartItems] = React.useState<comidaCafeteria[]>([])
   
@@ -48,15 +49,18 @@ export function AuthProvider({children}:React.PropsWithChildren) {
     <AuthContext.Provider
       value={{
         user: user,
-        signIn: (correo:string, contrasena:string) => {
-          if(correo.trim() === "" || contrasena.trim() === "") {
-            // en caso de que no haya ingresado ningun valor
-            alert("Rellene bien las casillas anteriores");
-            return;
-          }
-          // falta la conexcion a la base de datos y revisar
-          // en caso de que falle firebase y la base de datos, se le hara saber
-          setUser(correo)
+        signIn: (data:object) => {
+          console.log(data.est_id);
+          
+          
+          // if(correo.trim() === "" || contrasena.trim() === "") {
+          //   // en caso de que no haya ingresado ningun valo
+          //   alert("Rellene bien las casillas anteriores");
+          //   return;
+          // }
+          // // falta la conexcion a la base de datos y revisar
+          // // en caso de que falle firebase y la base de datos, se le hara saber
+          // setUser(correo)
         },
         // nueva funcion para el ingreso de usuario apenas registrados
         singInNewUser: (correo:string, nombre:string) => {
