@@ -73,8 +73,8 @@ CREATE TABLE IF NOT EXISTS carrito(
 );
 
 
-INSERT INTO carrito(car_est_id,car_men_id,car_cantidadFinal,car_descripcion)
-	VALUES('1','1','123.43','no colocar x cosa');
+#INSERT INTO carrito(car_est_id,car_men_id,car_cantidadFinal,car_descripcion)
+#	VALUES('1','1','123.43','no colocar x cosa');
 
 CREATE TABLE IF NOT EXISTS pedido (
     ped_id INT NOT NULL AUTO_INCREMENT,
@@ -95,8 +95,8 @@ CREATE TABLE IF NOT EXISTS pedido (
         ON UPDATE CASCADE
 );
 
-INSERT INTO pedido(ped_car_id,ped_per_id, ped_estado)
-	VALUES ('1','1','en proceso');
+#INSERT INTO pedido(ped_car_id,ped_per_id, ped_estado)
+#	VALUES ('1','1','en proceso');
 
 
 --     men_platillo
