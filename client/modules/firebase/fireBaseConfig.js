@@ -67,7 +67,7 @@ const registerUser = async (email, password, nombre, aPaterno, aMaterno) => {
 }
 
 // Iniciar sesión usuarios existentes
-const loginUser = (email, password) => {
+const loginUserFirebase = async (email, password) => {
   console.log("@@@@ Iniciando sesion...");
   return new Promise((resolve, reject) => {
     signInWithEmailAndPassword(auth, email, password)
@@ -98,4 +98,4 @@ const sendPasswordReset = async(email) => {
     });
 }
 
-export { registerUser, loginUser, sendPasswordReset };
+export { registerUser, loginUserFirebase, sendPasswordReset };

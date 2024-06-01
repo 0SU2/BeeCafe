@@ -47,6 +47,7 @@ export default function PantallaComida() {
 
   React.useEffect(() => {
     if(pestanaActiva == "comida") {
+      console.log(process.env.EXPO_PUBLIC_IPV4_OWN);
       axios.get(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/menuComida`)
       .then(response => {
         setPosts(response.data)

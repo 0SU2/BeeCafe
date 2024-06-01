@@ -49,9 +49,9 @@ export const registroWithAxios = async(newEst) => {
     console.log(cn);
     console.log("ENTRA POSTEST WITH AXIOS");
                                   // ipv4 from wifi connected and current port from the server
-    const res = await axios.post(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/estudiante/registro`,{newEst});
+    const res = await axios.post(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/registro`,{newEst});
     console.log("siguiente de res")
-    if(!res.data.succes) {
+    if(!res.data.success) {
       console.log("entra if")
       let newMessage;
       // agregar nuevos errores de mysql que vayan existiendo para mandar un mensaje
@@ -66,8 +66,7 @@ export const registroWithAxios = async(newEst) => {
       }
       res.data.msg = newMessage;
     }
-
-    return res.data
+    return {...res.data}
   }
 
   const mensage = "Correo Invalido"
@@ -78,22 +77,17 @@ export const registroWithAxios = async(newEst) => {
 
 export const sesionWithAxios = async(newEst) => {
   // primero checamos si el correo es valido de la ugto con regex
-  //const regex = new RegExp('[2a-z]+[.]+.+@ugto+\.[a-z]{2,3}');
-  console.log(newEst.correo,newEst.contrasena)
+  const regex = new RegExp('[2a-z]+[.]+.+@ugto+\.[a-z]{2,3}');
+  //const regex = new RegExp('^[a-z0-9._%+-]+@ugto\\.mx$');
 
-  try{
-    const res = await axios.post(`http://${IPV4_OWN}:${PORT_SERVER}/inicioSession`,{newEst});
-    console.log("despues axios");
-    console.log(res.data);
-  
-    if(!res.data.succes){
-      console.log(res.data.msg,"error no success");
-    }
-  
-    return res.data
-  }catch(err){
-    console.log("Error solicitud",err);
+  // si el correo no es valido regresamos
+  if(regex.test(newEst.correo)) {
 
+                                  // ipv4 from wifi connected and current port from the server
+    const res = await axios.get(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/inicioSession`, {params: newEst});
+    console.log("siguiente de res")
+
+    return {"msg": res.data.msg, "success": res.data.success}
   }
   
 }

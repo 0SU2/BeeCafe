@@ -6,7 +6,7 @@ import { useAuth } from '../../modules/context/auth';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { getEst, postEst, registroWithAxios, sesionWithAxios} from '../../api';
 import { useTogglePasswordVisibility } from '../../modules/components/togglePassword';
-import { registerUser } from '../../modules/firebase/fireBaseConfig';
+import { loginUserFirebase, registerUser } from '../../modules/firebase/fireBaseConfig';
 
 export default function App() {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } = useTogglePasswordVisibility();
@@ -34,32 +34,46 @@ export default function App() {
   
   
   const loginUser = async() => {
+    if(input.correo.trim() == "" || input.contrasena.trim() == "") {
+      Alert.alert("Error", "Rellene bien las casillas");
+      return;
+    }
     // login para usuario, primero revisamos en la base de datos que exista
-    const response = await sesionWithAxios(input);
-    console.log(response);
+    const response = await sesionWithAxios(input)
+    if(!response.success) {
+      let message = response.msg;
+      alert(message);
+      return;
+    }
+
+    // buscamos que el usuario este registrado en el firebase
+    const firebaseResponse = await loginUserFirebase(input.correo, input.contrasena);
     
+    // si el usuario existe en nuestra base de datos, vamos a guardar el
+    // id en el auth para poder manipularlo en las otras vistas,
+    // esto porque el auth es una propiedad donde todos heredan sus atributos
+    signIn(response.msg)
+    return;
   }
 
   const registro = async() => {
     const response = await registroWithAxios(input);
-    console.log(response);
     
     if(!response.success) {
       let responseMsg = response.msg
       Alert.alert("Error", responseMsg);
       return;
     }
-
-
-
+    
     // ya se registro en la base de datos sql, ahora se debe ingresar en firebase
     registerUser(input.correo, input.contrasena, input.nombre, input.apePaterno, input.apeMaterno);
 
     Alert.alert("Correcto", "Registro satisfactorio");
-
-    singInNewUser(input.correo);
+    
+    singInNewUser(response.msg);
     return;
   }
+
   const abrirTarjeta = () => {
     setMostrarTarjeta(true);
   }
