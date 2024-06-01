@@ -6,13 +6,14 @@ import { registrarEstudiante,
             getText,
             getEstudiantes,
             loginEstudiante
-       } from '../controllers/CregistrarEst.js';
+       } from '../controllers/Estudiante.js';
 
 const router = Router();
 
-router.post('/registro',registrarEstudiante);
+router.post('/estudiante/registro',registrarEstudiante);
+
 router.get('/tasks',getText);
-router.get('/estudiantes',getEstudiantes);
-router.get('/inicioSession', loginEstudiante)
+router.get('/estudiantes/:id',getEstudiantes);
+router.post('/inicioSession', loginEstudiante);
 
 export default router;

@@ -8,13 +8,19 @@ export const getEstudiantes = async (req,res) =>{
 export const loginEstudiante = async(req, res) => {
     try {
         const conn = await connDB();
-        const body = req.query
-        const response = await conn.execute("SELECT * FROM estudiantes WHERE est_correo = ? AND est_contrasena = ?",
+        const body = req.body
+        console.log(body.correo,body.contrasena)
+        const [response] = await conn.execute("SELECT est_id FROM estudiantes WHERE est_correo = ? AND est_contrasena = ?",
             [body.correo, body.contrasena]
         );
-
         
-        res.json({"success": true })
+        if (response.length > 0) {
+            const user = response[0];
+            res.json({ success: true, userId: user.est_id });
+          } else {
+            res.json({ success: false, msg: "Credenciales incorrectas" });
+          }
+
     } catch (error) {
         console.log(error);
         res.json({"success": false, "msg": error})

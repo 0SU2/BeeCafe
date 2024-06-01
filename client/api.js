@@ -40,15 +40,16 @@ export const postEst = async (newEst) =>{
 export const registroWithAxios = async(newEst) => {
   // primero checamos si el correo es valido de la ugto con regex
   const regex = new RegExp('[2a-z]+[.]+.+@ugto+\.[a-z]{2,3}');
-  //const regex = new RegExp('^[a-z0-9._%+-]+@ugto\\.mx$');
 
   // si el correo no es valido regresamos
   if(regex.test(newEst.correo)) {
     let tu = process.env.EXPO_PUBLIC_IPV4_OWN;
+    let cn = IPV4_OWN;
     console.log(tu);
+    console.log(cn);
     console.log("ENTRA POSTEST WITH AXIOS");
                                   // ipv4 from wifi connected and current port from the server
-    const res = await axios.post(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.PORT_SERVER}/registro`,{newEst});
+    const res = await axios.post(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/estudiante/registro`,{newEst});
     console.log("siguiente de res")
     if(!res.data.succes) {
       console.log("entra if")
@@ -77,37 +78,22 @@ export const registroWithAxios = async(newEst) => {
 
 export const sesionWithAxios = async(newEst) => {
   // primero checamos si el correo es valido de la ugto con regex
-  const regex = new RegExp('[2a-z]+[.]+.+@ugto+\.[a-z]{2,3}');
-  //const regex = new RegExp('^[a-z0-9._%+-]+@ugto\\.mx$');
+  //const regex = new RegExp('[2a-z]+[.]+.+@ugto+\.[a-z]{2,3}');
+  console.log(newEst.correo,newEst.contrasena)
 
-  // si el correo no es valido regresamos
-  if(regex.test(newEst.correo)) {
-    console.log(newEst);
-                                  // ipv4 from wifi connected and current port from the server
-    const res = await axios.get(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/inicioSession`, {params: newEst});
-    return res
-    // console.log("siguiente de res")
-    // if(!res.data.succes) {
-    //   console.log("entra if")
-    //   let newMessage;
-    //   // agregar nuevos errores de mysql que vayan existiendo para mandar un mensaje
-    //   // mas claro al usuario
-    //   switch (res.data.msg) {
-    //     case "for key 'estudiantes.uni_correo'":
-    //       newMessage = "Correo ya existente";
-    //       break;
-    //     case "for key 'estudiantes.uni_nombre_apePat_apeMat'":
-    //       newMessage = "Nombre de estudiante ya existente";
-    //       break;
-    //   }
-    //   res.data.msg = newMessage;
-    // }
-
+  try{
+    const res = await axios.post(`http://${IPV4_OWN}:${PORT_SERVER}/inicioSession`,{newEst});
+    console.log("despues axios");
+    console.log(res.data);
+  
+    if(!res.data.succes){
+      console.log(res.data.msg,"error no success");
+    }
+  
     return res.data
+  }catch(err){
+    console.log("Error solicitud",err);
+
   }
-
-  const mensage = "Correo Invalido"
-
-  return {"success" : false, "msg": mensage}
   
 }

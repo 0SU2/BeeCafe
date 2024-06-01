@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors"; 
 import morgan from  "morgan"; 
 
-import EstRoutes from './routes/registrarEst.js'; 
+import EstRoutes from './routes/estudiante.js'; 
 import router from "./routes/menuEst.js";
 import pedidosRouter from "./routes/pedidosEst.js";
 

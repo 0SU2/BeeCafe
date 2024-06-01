@@ -13,9 +13,11 @@ export default function App() {
   
   // valores que recibe del registro
   const RegValues = (name:string, value:string) => forms({...input, [name]: value});
+  //const IniValues = (name:string, value:string) => for({...in, [name]: value});
 
   const [mostrarTarjeta, setMostrarTarjeta] = React.useState(false);
-
+  
+  // Registrar Estudiante 
   const [input,forms] = React.useState({
     nombre:"",
     apePaterno:"",
@@ -24,6 +26,8 @@ export default function App() {
     contrasena:"",
   });
 
+  //Inicio Sesion 
+  
   // funcion signIn para la validacion del usuario y cambiarlo a la view 
   // del menu
   const { signIn, singInNewUser } =  useAuth();  
@@ -31,7 +35,7 @@ export default function App() {
   
   const loginUser = async() => {
     // login para usuario, primero revisamos en la base de datos que exista
-    const response = await sesionWithAxios(input)
+    const response = await sesionWithAxios(input);
     console.log(response);
     
   }
@@ -45,6 +49,8 @@ export default function App() {
       Alert.alert("Error", responseMsg);
       return;
     }
+
+
 
     // ya se registro en la base de datos sql, ahora se debe ingresar en firebase
     registerUser(input.correo, input.contrasena, input.nombre, input.apePaterno, input.apeMaterno);
