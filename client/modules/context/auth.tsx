@@ -19,7 +19,7 @@ export function AuthProvider({children}:React.PropsWithChildren) {
   const rootSegment = useSegments()[0];
   const router = useRouter(); // nos permite navegar entre paginas
   const [user, setUser] = React.useState<string | undefined>("");
-  const [idUser, setIdUser] = React.useState<number>();
+  const [idUser, setIdUser] = React.useState<number | undefined>(undefined);
   const [cartItems, setCartItems] = React.useState<comidaCafeteria[]>([])
   
   // usar un useEffect para revisar si tenemos un usuario al cargar la pagina por primera vez
@@ -50,31 +50,19 @@ export function AuthProvider({children}:React.PropsWithChildren) {
       value={{
         user: user,
         signIn: (data:object) => {
-          console.log(data.est_id);
-          
-          
-          // if(correo.trim() === "" || contrasena.trim() === "") {
-          //   // en caso de que no haya ingresado ningun valo
-          //   alert("Rellene bien las casillas anteriores");
-          //   return;
-          // }
-          // // falta la conexcion a la base de datos y revisar
-          // // en caso de que falle firebase y la base de datos, se le hara saber
-          // setUser(correo)
+          setUser(data[0].est_correo)
+          setIdUser(data[0].est_id)
         },
         // nueva funcion para el ingreso de usuario apenas registrados
-        singInNewUser: (correo:string, nombre:string) => {
-          if(correo.trim() === "" ) {
-            Alert.alert("Error", "Rellene bien las casillas anteriores");
-            return;
-          }
-
-          setUser(correo);
+        singInNewUser: (data:object) => {
+          setUser(data.newEst.correo)
+          setIdUser(data.est_id);
         },
         signOut: () => {
           // funcion para eliminar la sesion del usuario
           setUser("");
-        },
+          setIdUser(undefined);
+        },   
         addItemsCart: (items:comidaCafeteria) => {
           data.push({...items});
           setCartItems(data);
@@ -89,7 +77,10 @@ export function AuthProvider({children}:React.PropsWithChildren) {
         },
         getAddedItemsCart: () => {
           return cartItems;
-        }
+        },
+        getUserId: () => {
+          return idUser;
+        }, 
       }}
     >
       {children}

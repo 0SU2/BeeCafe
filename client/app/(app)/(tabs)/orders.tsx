@@ -19,7 +19,7 @@ export default function OrderLayoutTab() {
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   const [cartItemsFood, setCartItemsFood] = useState<comidaCafeteria[]>([])
-  const { getAddedItemsCart, removeItemCart, deleteAllItemsCart } = useAuth();
+  const { getAddedItemsCart, removeItemCart, deleteAllItemsCart, getUserId } = useAuth();
   const itemsCart = getAddedItemsCart();
   
   React.useEffect(() => {
@@ -55,9 +55,10 @@ export default function OrderLayoutTab() {
     }, 0);
   };
 
-  const payOrder = () => {
+  const payOrder = async() => {
     // hacer una peticion post al mysql con la informacion del usuario
-
+    console.log(getUserId());
+    
     setPaymentSuccess(true);
     setTimeout(() => {
       resetOrderState();

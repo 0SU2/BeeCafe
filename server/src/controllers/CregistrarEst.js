@@ -8,11 +8,10 @@ export const getEstudiantes = async (req,res) =>{
 export const loginEstudiante = async(req, res) => {
     try {
         const conn = await connDB();
-        const pene = req.query.correo
-        const pene2 = req.query.contrasena
-        console.log(pene);
+        const correo = req.query.correo
+        const contasena = req.query.contrasena
         const [rows, fields] = await conn.execute("SELECT * FROM estudiantes WHERE est_correo = ? and est_contrasena = ? ",
-            [pene, pene2]
+            [correo, contasena]
         );
         if(rows.length == 0 ) {
             res.json({ "success": false, "msg": "Error con alguna de las casillas, intente de nuevo"});
@@ -42,8 +41,8 @@ export const registrarEstudiante = async (req,res) =>{
             est_id: result.insertId,
             ...req.body,
         };
-        res.json({"success": true, "msg": newEst })
         console.log(newEst);
+        res.json({"success": true, "msg": newEst})
     }catch(err){
         console.error(err);
         res.json({"success" : false , "msg": err.sqlMessage })

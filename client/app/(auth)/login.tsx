@@ -36,20 +36,20 @@ export default function App() {
     }
     // login para usuario, primero revisamos en la base de datos que exista
     const response = await sesionWithAxios(input)
-    // if(!response.data.success) {
-    //   let message = response.data.msg;
-    //   alert(message);
-    //   return;
-    // }
+    if(!response.success) {
+      let message = response.msg;
+      alert(message);
+      return;
+    }
 
-    // // buscamos que el usuario este registrado en el firebase
-    // const firebaseResponse = await loginUserFirebase(input.correo, input.contrasena);
+    // buscamos que el usuario este registrado en el firebase
+    const firebaseResponse = await loginUserFirebase(input.correo, input.contrasena);
     
     // si el usuario existe en nuestra base de datos, vamos a guardar el
     // id en el auth para poder manipularlo en las otras vistas,
     // esto porque el auth es una propiedad donde todos heredan sus atributos
-    console.log(response);
-    
+    signIn(response.msg)
+    return;
   }
 
   const registro = async() => {
@@ -60,13 +60,13 @@ export default function App() {
       Alert.alert("Error", responseMsg);
       return;
     }
-
+    
     // ya se registro en la base de datos sql, ahora se debe ingresar en firebase
     registerUser(input.correo, input.contrasena, input.nombre, input.apePaterno, input.apeMaterno);
 
     Alert.alert("Correcto", "Registro satisfactorio");
-
-    singInNewUser(input.correo);
+    
+    singInNewUser(response.msg);
     return;
   }
 

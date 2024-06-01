@@ -48,9 +48,9 @@ export const registroWithAxios = async(newEst) => {
     console.log(tu);
     console.log("ENTRA POSTEST WITH AXIOS");
                                   // ipv4 from wifi connected and current port from the server
-    const res = await axios.post(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.PORT_SERVER}/registro`,{newEst});
+    const res = await axios.post(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/registro`,{newEst});
     console.log("siguiente de res")
-    if(!res.data.succes) {
+    if(!res.data.success) {
       console.log("entra if")
       let newMessage;
       // agregar nuevos errores de mysql que vayan existiendo para mandar un mensaje
@@ -65,8 +65,7 @@ export const registroWithAxios = async(newEst) => {
       }
       res.data.msg = newMessage;
     }
-
-    return res.data
+    return {...res.data}
   }
 
   const mensage = "Correo Invalido"
@@ -82,28 +81,12 @@ export const sesionWithAxios = async(newEst) => {
 
   // si el correo no es valido regresamos
   if(regex.test(newEst.correo)) {
-    console.log('yes');
-    console.log(newEst);
+
                                   // ipv4 from wifi connected and current port from the server
     const res = await axios.get(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/inicioSession`, {params: newEst});
     console.log("siguiente de res")
-    if(!res.data.succes) {
-      console.log("entra if")
-      let newMessage;
-      // agregar nuevos errores de mysql que vayan existiendo para mandar un mensaje
-      // mas claro al usuario
-      switch (res.data.msg) {
-        case "for key 'estudiantes.uni_correo'":
-          newMessage = "Correo ya existente";
-          break;
-        case "for key 'estudiantes.uni_nombre_apePat_apeMat'":
-          newMessage = "Nombre de estudiante ya existente";
-          break;
-      }
-      res.data.msg = newMessage;
-    }
 
-    return res.data
+    return {"msg": res.data.msg, "success": res.data.success}
   }
 
   const mensage = "Correo Invalido"
