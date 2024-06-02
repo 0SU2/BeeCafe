@@ -6,20 +6,29 @@ import axios from 'axios';
 import { comidaCafeteria } from '../../../types/userTypes';
 import { useAuth } from '../../../modules/context/auth';
 
-const TarjetaComidaMyComida: React.FC<{ comida: comidaCafeteria, onAgregarAlCarrito: (comida:comidaCafeteria) => void, onMostrarDetalles: (comida: comidaCafeteria) => void }> = ({ comida, onAgregarAlCarrito, onMostrarDetalles }) => (
-  <Card style={styles.card}>
-    <Card.Title title={comida.men_platillo} subtitle={comida.men_precio} />
-    <Card.Cover source={{ uri: 'https://picsum.photos/700' }} style={styles.cardImage} />
-    <Card.Actions>
-      <Button mode="contained" onPress={() => onAgregarAlCarrito(comida)} color="blue">
-        Añadir al Carrito
-      </Button>
-      <Button mode="outlined" onPress={() => onMostrarDetalles(comida)} color="blue">
-        Ver Detalles
-      </Button>
-    </Card.Actions>
-  </Card>
-);
+
+const TarjetaComidaMyComida: React.FC<{ comida: comidaCafeteria, onAgregarAlCarrito: (comida:comidaCafeteria) => void, onMostrarDetalles: (comida: comidaCafeteria) => void }> = ({ comida, onAgregarAlCarrito, onMostrarDetalles }) => {
+  // const men_img = `../assets/images/comidas/${comida.men_id}.jpg`;
+
+  return (
+    <Card style={styles.card}>
+      <Card.Title title={comida.men_platillo} subtitle={`$${comida.men_precio}`} />
+      <Card.Cover source={{ uri: comida.men_img }} style={styles.cardImage} />
+      <Card.Content>
+        <Paragraph>{comida.men_descripcion}</Paragraph>
+      </Card.Content>
+      <Card.Actions>
+        <Button mode="contained" onPress={() => onAgregarAlCarrito(comida)} color="blue">
+          Añadir al Carrito
+        </Button>
+        <Button mode="outlined" onPress={() => onMostrarDetalles(comida)} color="blue">
+          Ver Detalles
+        </Button>
+      </Card.Actions>
+    </Card>
+  );
+};
+
 
 const ModalDetallesComida: React.FC<{ visible: boolean, comida: comidaCafeteria | null, onCerrar: () => void }> = ({ visible, comida, onCerrar }) => (
   <Portal>

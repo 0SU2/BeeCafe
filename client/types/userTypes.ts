@@ -7,6 +7,7 @@ export interface comidaCafeteria {
   men_disponible:string;
   men_ingredientes: string;
   men_tiempo_preparacion: string;
+  men_img: string;
 }
 
 interface ArticuloComida {
