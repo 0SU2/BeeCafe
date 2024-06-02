@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Button, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-
+import axios from 'axios';
 import { useAuth } from '../../../modules/context/auth';
 import { comidaCafeteria } from '../../../types/userTypes';
 
@@ -31,9 +31,18 @@ export default function OrderLayoutTab() {
     setSelectedTab(tab);
   };
 
-  const removeItem = (itemId: number) => {
+  const removeItem = async (itemId: number) => {
     const updateCartItem = cartItemsFood.filter(item => item.men_id !== itemId);
     removeItemCart(updateCartItem)
+    console.log(itemId,"hereeeee?");
+
+    const data = {
+      car_est_id: getUserId(),
+      car_men_id: itemId
+    };
+    const response = await axios.delete(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/eliminarmenu`,{data})
+    console.log(response.data);
+
   };
 
   const placeOrder = () => {

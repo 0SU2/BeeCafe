@@ -4,7 +4,9 @@ import { Card, Button, Portal, Provider, Paragraph } from 'react-native-paper';
 
 import axios from 'axios';
 import { comidaCafeteria } from '../../../types/userTypes';
-import { useAuth } from '../../../modules/context/auth';
+import { useAuth } from '../../../modules/context/auth'; 
+
+
 
 const TarjetaComidaMyComida: React.FC<{ comida: comidaCafeteria, onAgregarAlCarrito: (comida:comidaCafeteria) => void, onMostrarDetalles: (comida: comidaCafeteria) => void }> = ({ comida, onAgregarAlCarrito, onMostrarDetalles }) => (
   <Card style={styles.card}>
@@ -43,7 +45,9 @@ export default function PantallaComida() {
   const [modalVisible, setModalVisible] = useState(false);
   const [pestanaActiva, setPestanaActiva] = useState<'comida' | 'platillos' | 'bebidas'>('comida');
   const [ posts, setPosts ] = useState<comidaCafeteria[]>([]);
-  const { addItemsCart } = useAuth();
+  const { addItemsCart, getUserId, getFood, getMenuId, obComida } = useAuth();
+
+  console.log(getUserId());
 
   React.useEffect(() => {
     if(pestanaActiva == "comida") {
@@ -53,7 +57,9 @@ export default function PantallaComida() {
         setPosts(response.data)
       })
     }
- 
+
+
+
     if(pestanaActiva == "platillos") {
       axios.get(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/menuPlatillos`)
       .then(response => {
@@ -73,9 +79,23 @@ export default function PantallaComida() {
     
   }, [pestanaActiva])
 
-  const handleAgregarAlCarrito = (comida: comidaCafeteria) => {
+  const handleAgregarAlCarrito = async (comida: comidaCafeteria) => {
+    console.log(comida.men_id);
+    console.log(getUserId());
+    // objeto con los datos recopilados 
+    const data = {
+      car_men_id: comida.men_id,
+      car_est_id: getUserId(),
+      car_descripcion: "test",
+      car_cantidadFinal: 24
+    }
     addItemsCart(comida)
-
+    console.log(data);
+    const response = await axios.post(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/regcarrito`,{data})
+    console.log(response.data);
+    
+    console.log(getMenuId(),  "uno queeee!?");
+    
     // mandar una alerta despues de que se haya agregado el platillo que sea
     // Alert.alert("Agregaste al carrito: ", comida.men_platillo)
   }

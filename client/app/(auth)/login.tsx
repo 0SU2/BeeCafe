@@ -40,14 +40,14 @@ export default function App() {
     }
     // login para usuario, primero revisamos en la base de datos que exista
     const response = await sesionWithAxios(input)
-    if(!response.success) {
-      let message = response.msg;
-      alert(message);
-      return;
-    }
+    //if(!response.success) {
+    //  let message = response.msg;
+    //  alert(message);
+    //  return;
+    //}
 
     // buscamos que el usuario este registrado en el firebase
-    const firebaseResponse = await loginUserFirebase(input.correo, input.contrasena);
+    //const firebaseResponse = await loginUserFirebase(input.correo, input.contrasena);
     
     // si el usuario existe en nuestra base de datos, vamos a guardar el
     // id en el auth para poder manipularlo en las otras vistas,

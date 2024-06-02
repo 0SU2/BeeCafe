@@ -20,7 +20,9 @@ export function AuthProvider({children}:React.PropsWithChildren) {
   const router = useRouter(); // nos permite navegar entre paginas
   const [user, setUser] = React.useState<string | undefined>("");
   const [idUser, setIdUser] = React.useState<number | undefined>(undefined);
-  const [cartItems, setCartItems] = React.useState<comidaCafeteria[]>([])
+  const [cartItems, setCartItems] = React.useState<comidaCafeteria[]>([]);
+  const [cartId, setCartId] = React.useState<number | undefined>(undefined); 
+  const [idMenu, setIdMenu] = React.useState<number | undefined>(undefined); 
   
   // usar un useEffect para revisar si tenemos un usuario al cargar la pagina por primera vez
   React.useEffect(() => {
@@ -38,7 +40,7 @@ export function AuthProvider({children}:React.PropsWithChildren) {
       // en caso de que el usuario se haya autenticado, se le llevara al menu
       // de su perfil y como parametro el nombre del usuario que se consiga para
       // busqueda 
-      console.log(user)
+      console.log(user, "aqui?")
       router.push({
         pathname: "/(tabs)/[user]",
         params: {user}
@@ -52,11 +54,11 @@ export function AuthProvider({children}:React.PropsWithChildren) {
         signIn: (data:object) => {
           setUser(data[0].est_correo)
           setIdUser(data[0].est_id)
+          
         },
         // nueva funcion para el ingreso de usuario apenas registrados
         singInNewUser: (data:object) => {
           setUser(data.newEst.correo)
-          setIdUser(data.est_id);
         },
         signOut: () => {
           // funcion para eliminar la sesion del usuario
@@ -66,6 +68,7 @@ export function AuthProvider({children}:React.PropsWithChildren) {
         addItemsCart: (items:comidaCafeteria) => {
           data.push({...items});
           setCartItems(data);
+          setIdMenu(data[0].men_id);
         },
         removeItemCart: (newItems:comidaCafeteria[]) => {
           data = newItems;
@@ -75,12 +78,18 @@ export function AuthProvider({children}:React.PropsWithChildren) {
           data = newItems
           setCartItems(data)
         },
+        obComida:(data:comidaCafeteria) =>{
+          setIdMenu(data[0].men_id)
+        },
         getAddedItemsCart: () => {
           return cartItems;
         },
         getUserId: () => {
           return idUser;
         }, 
+        getMenuId:() =>{
+          return idMenu;
+        }
       }}
     >
       {children}

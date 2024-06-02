@@ -1,3 +1,4 @@
+import { conn } from "../connection.js";
 import { connDB } from "../database.js";
 
 // Crear un nuevo pedido
@@ -102,5 +103,40 @@ export const obtenerDetallesPedidoEstudiante = async (req, res) => {
     }
 };
 
+export const getCarUser = async (req,res) => {
+  try{
+    const est_id = req.params
+    const conn = await connDB();
+
+    const [carrito] = await conn.execute(`
+      SELECT * FROM carrito WHERE car_est_id = ?`, 
+      [est_id]);
+
+    if (carrito.length === 0) {
+      return res.status(404).json({ message: 'Carrito no encontrado' });
+    }
+
+    res.json({carrito:carrito[0]});    
+  }catch(err){
+    console.log(err)
+    res.json({"success" : false , "msg": err.sqlMessage })
+  }
+};
 
 
+export const deleteCarMenu = async (req,res) =>{
+  try{
+      const { car_est_id, car_men_id} = req.body
+      const conn = await connDB();
+
+      const [eliminar] = await conn.execute(` 
+        DELETE FROM carrito WHERE car_est_id = ? AND car_men_id = ?
+      `, [car_est_id,car_men_id]);
+
+      res.json({"success": true, "msg": "Platillo eliminado"});
+  }catch(err){
+    console.log(err)
+    res.json({"success" : false , "msg": err.sqlMessage })
+  }
+
+}
