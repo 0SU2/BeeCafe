@@ -47,7 +47,7 @@ export default function App() {
     }
 
     // buscamos que el usuario este registrado en el firebase
-    const firebaseResponse = await loginUserFirebase(input.correo, input.contrasena);
+    // const firebaseResponse = await loginUserFirebase(input.correo, input.contrasena);
     
     // si el usuario existe en nuestra base de datos, vamos a guardar el
     // id en el auth para poder manipularlo en las otras vistas,

@@ -8,8 +8,6 @@ import { useAuth } from '../../../modules/context/auth';
 
 
 const TarjetaComidaMyComida: React.FC<{ comida: comidaCafeteria, onAgregarAlCarrito: (comida:comidaCafeteria) => void, onMostrarDetalles: (comida: comidaCafeteria) => void }> = ({ comida, onAgregarAlCarrito, onMostrarDetalles }) => {
-  // const men_img = `../assets/images/comidas/${comida.men_id}.jpg`;
-
   return (
     <Card style={styles.card}>
       <Card.Title title={comida.men_platillo} subtitle={`$${comida.men_precio}`} />
@@ -50,7 +48,7 @@ const ModalDetallesComida: React.FC<{ visible: boolean, comida: comidaCafeteria 
 export default function PantallaComida() {
   const [comidaSeleccionada, setComidaSeleccionada] = useState<comidaCafeteria | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [pestanaActiva, setPestanaActiva] = useState<'comida' | 'platillos' | 'bebidas'>('comida');
+  const [pestanaActiva, setPestanaActiva] = useState<'desayuno' | 'comida' | 'platillos' | 'bebidas'>('comida');
   const [ posts, setPosts ] = useState<comidaCafeteria[]>([]);
   const { addItemsCart } = useAuth();
 
@@ -72,6 +70,13 @@ export default function PantallaComida() {
 
     if(pestanaActiva == 'bebidas') {
       axios.get(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/menuBebidas`)
+      .then(response => {
+        setPosts(response.data)
+      })
+    }
+    if(pestanaActiva == "desayuno") {
+      console.log(process.env.EXPO_PUBLIC_IPV4_OWN);
+      axios.get(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/menuDesayunos`)
       .then(response => {
         setPosts(response.data)
       })
@@ -127,6 +132,14 @@ export default function PantallaComida() {
             ))}
           </ScrollView>
         );
+      case 'desayuno':
+      return (
+        <ScrollView style={styles.scrollView}>
+          {posts.map(comida => (
+            <TarjetaComidaMyComida key={comida.men_id} comida={comida} onAgregarAlCarrito={handleAgregarAlCarrito} onMostrarDetalles={handleMostrarDetalles} />
+          ))}
+        </ScrollView>
+      );
       default:
         return null;
     }
@@ -137,6 +150,16 @@ export default function PantallaComida() {
       <View style={styles.fullScreen}>
         <Text style={styles.titulo}>¿Qué se te antoja?</Text>
         <View style={styles.tabContainer}>
+        <Button
+            mode={pestanaActiva === 'desayuno' ? 'contained' : 'outlined'}
+            onPress={() => {
+              setPestanaActiva('desayuno')
+            }}
+            style={styles.tabButton}
+          >
+            Desayunos
+          </Button>
+          
           <Button
             mode={pestanaActiva === 'comida' ? 'contained' : 'outlined'}
             onPress={() => {
