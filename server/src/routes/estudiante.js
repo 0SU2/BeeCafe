@@ -14,6 +14,6 @@ router.post('/estudiante/registro',registrarEstudiante);
 
 router.get('/tasks',getText);
 router.get('/estudiantes/:id',getEstudiantes);
-router.post('/inicioSession', loginEstudiante);
+router.get('/inicioSession', loginEstudiante);
 
 export default router;
