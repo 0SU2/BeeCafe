@@ -100,8 +100,8 @@ export default function PantallaComida() {
     const data = {
       car_men_id: comida.men_id,
       car_est_id: getUserId(),
-      car_descripcion: "test",
-      car_cantidadFinal: 24
+      //car_descripcion: "test",
+      //car_cantidadFinal: 24
     }
     addItemsCart(comida)
     console.log(data);

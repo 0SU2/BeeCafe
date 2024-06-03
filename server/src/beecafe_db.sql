@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS estudiantes (
 );
 
 INSERT INTO estudiantes(est_nombre,est_apePat,est_apeMat,est_correo,est_contrasena)
-	VALUES ('antonio','castillo','quintanilla','correo','1234');
+	VALUES ('antonio','castillo','quintanilla','ac.cas@ugto.mx','1234');
 INSERT INTO estudiantes(est_nombre,est_apePat,est_apeMat,est_correo,est_contrasena)
 	VALUES ('Osvaldo','Martinez','Gonzalez','o.martinezgonzalez@ugto.mx','omg123');    
 INSERT INTO estudiantes(est_nombre,est_apePat,est_apeMat,est_correo,est_contrasena)
@@ -55,10 +55,7 @@ CREATE TABLE IF NOT EXISTS menu (
 CREATE TABLE IF NOT EXISTS carrito(
     car_id INT NOT NULL AUTO_INCREMENT,
     car_est_id INT NOT NULL, 
-    car_men_id INT NOT NULL,
-    car_descripcion TEXT,
-    car_cantidadFinal DECIMAL(10,2) NOT NULL,
-    
+    car_men_id INT NOT NULL,    
     PRIMARY KEY (car_id),
     CONSTRAINT fk_carrito_estudiantes
         FOREIGN KEY (car_est_id)
@@ -74,31 +71,24 @@ CREATE TABLE IF NOT EXISTS carrito(
         ON UPDATE CASCADE
 );
 
-
-#INSERT INTO carrito(car_est_id,car_men_id,car_cantidadFinal,car_descripcion)
-#	VALUES('1','1','123.43','no colocar x cosa');
-
 CREATE TABLE IF NOT EXISTS pedido (
     ped_id INT NOT NULL AUTO_INCREMENT,
     ped_car_id INT NOT NULL, 
-    ped_per_id INT NOT NULL,
-    ped_estado ENUM('pendiente', 'en proceso', 'completado') NOT NULL DEFAULT 'pendiente',
+    ped_cantidadTotal DECIMAL(10,2),
     ped_fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (ped_id),
     CONSTRAINT fk_pedido_estudiantes
         FOREIGN KEY (ped_car_id)
-        REFERENCES estudiantes(est_id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    CONSTRAINT fk_pedido_personal
-        FOREIGN KEY (ped_per_id)
-        REFERENCES personal(per_id)
+        REFERENCES carrito(car_id)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
-#INSERT INTO pedido(ped_car_id,ped_per_id, ped_estado)
-#	VALUES ('1','1','en proceso');
+INSERT INTO pedido (ped_car_id)
+	SELECT car_id
+	FROM carrito
+		WHERE car_est_id = 1;
+
 
 
 --     men_platillo

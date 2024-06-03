@@ -30,8 +30,8 @@ export const postmenu = async(req,res) =>{
     const conn = await connDB();
     const body = req.body.data;
     const [result] = await conn.execute(
-      "INSERT INTO carrito(car_est_id,car_men_id,car_descripcion,car_cantidadFinal) VALUES(?,?,?,?)",
-      [body.car_est_id,body.car_men_id,body.car_descripcion,body.car_cantidadFinal]
+      "INSERT INTO carrito(car_est_id,car_men_id) VALUES(?,?)",
+      [body.car_est_id,body.car_men_id]
       
     );
     
