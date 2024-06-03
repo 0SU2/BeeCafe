@@ -4,13 +4,13 @@ import {
   obtenerPedidos,
   cambiarPlatilloPedido,
   obtenerDetallesPedidoEstudiante
-} from '../controllers/pedidoController.js';
+} from '../controllers/contVerPedido.js';
 
-const router = express.Router();
+const pedidos = express.Router();
 
-router.post('/crear', crearPedido);
-router.get('/obtener', obtenerPedidos);
-router.put('/cambiar-platillo', cambiarPlatilloPedido);
-router.get('/detalles/:ped_id', obtenerDetallesPedidoEstudiante);
+pedidos.post('/crear', crearPedido);
+pedidos.get('/obtener', obtenerPedidos);
+pedidos.put('/cambiar-platillo', cambiarPlatilloPedido);
+pedidos.get('/detalles/:ped_id', obtenerDetallesPedidoEstudiante);
 
-export default router;
+export default pedidos;

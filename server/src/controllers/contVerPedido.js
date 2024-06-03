@@ -80,23 +80,21 @@ export const obtenerDetallesPedidoEstudiante = async (req, res) => {
 
     // Obtener detalles del pedido
     const [pedido] = await conn.execute(
-      `SELECT p.ped_id, p.ped_estado, p.ped_fecha, m.men_platillo, m.men_precio, m.men_ingredientes
-      FROM pedido p
-      INNER JOIN carrito c ON p.ped_car_id = c.car_id
-      INNER JOIN menu m ON c.car_men_id = m.men_id
-      WHERE p.ped_id = ?`,
+      `SELECT pedido.ped_id, pedido.ped_cantidadTotal, carrito.car_fecha, menu.men_platillo
+       FROM pedido 
+       INNER JOIN carrito 
+        ON carrito.car_id = pedido.ped_car_id AND carrito.car_est_id = ? 
+       INNER JOIN menu 
+        ON menu.men_id = carrito.car_men_id`,
       [ped_id]
     );
 
     if (pedido.length === 0) {
+      console.log('inside');
       return res.status(404).json({ message: 'Pedido no encontrado' });
     }
 
-    // Calcular precio total del pedido
-    const precioTotal = pedido.reduce((total, item) => total + item.men_precio, 0);
-
-    // Devolver detalles del pedido junto con el precio total
-    res.json({ pedido: pedido[0], precioTotal });
+    res.json({pedido});
   } catch(err){
     console.error(err);
     res.json({"success" : false , "msg": err.sqlMessage })
@@ -139,4 +137,16 @@ export const deleteCarMenu = async (req,res) =>{
     res.json({"success" : false , "msg": err.sqlMessage })
   }
 
+}
+
+export const obtenerTodosLosPedidosUsuario = async(req,res) => {
+  try {
+    const conn = await connDB();
+    const body = req;
+    // SELECT pedido.ped_cantidadTotal, carrito.car_fecha FROM pedido INNER JOIN carrito ON carrito.car_id = pedido.ped_car_id AND carrito.car_est_id = ?
+    console.log(body);
+  } catch (error) {
+    console.log(error);
+    res.json({"success": false, "msg": error})
+  }
 }

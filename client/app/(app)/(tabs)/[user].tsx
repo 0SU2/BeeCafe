@@ -3,13 +3,28 @@ import React, { useState } from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import { useAuth } from '../../../modules/context/auth'
 import { FontAwesome, MaterialIcons, Ionicons } from '@expo/vector-icons'
+import axios from 'axios'
 
 type OptionType = 'info' | 'orders' | 'logout' | null
 
 export default function ProfileTab() {
   const { user } = useLocalSearchParams()
-  const { signOut } = useAuth()
+  const { signOut, getUserId } = useAuth()
   const [selectedOption, setSelectedOption] = useState<OptionType>(null)
+  const [ dataPedidos, setDataPedidos ] = React.useState([]);
+
+  React.useEffect(() => {
+    if(selectedOption == 'orders') {
+      axios.get(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/detalles/${getUserId()}` )
+      .then(response => {
+        setDataPedidos(response.data.pedido)
+      })
+      .catch(error => {
+        console.log(error);
+      })
+    }
+    
+  },[selectedOption])
 
   // Simulación de historial de pedidos
   const orders = [
@@ -22,19 +37,20 @@ export default function ProfileTab() {
     { id: 'info', label: 'Información', icon: <FontAwesome name="user" size={24} color="#007AFF" /> },
     { id: 'orders', label: 'Historial de Pedidos', icon: <MaterialIcons name="history" size={24} color="#007AFF" /> }
   ]
-
+  
   const renderOrders = () => (
     <>
       <TouchableOpacity style={styles.arrowButton} onPress={() => setSelectedOption(null)}>
         <Ionicons name="arrow-back" size={30} color="#007AFF" />
       </TouchableOpacity>
       <FlatList
-        data={orders}
-        keyExtractor={(item) => item.id}
+        data={dataPedidos}
+        keyExtractor={(item) => item.ped_id}
         renderItem={({ item }) => (
           <View style={styles.orderItem}>
-            <Text style={styles.orderText}>{item.item}</Text>
-            <Text style={styles.orderDate}>{item.date}</Text>
+            <Text style={styles.orderText}>{item.men_platillo}</Text>
+            <Text style={styles.orderText}>{item.ped_cantidadTotal}</Text>
+            <Text style={styles.orderDate}>{item.car_fecha.substring(0,10)}</Text>
           </View>
         )}
       />

@@ -65,8 +65,6 @@ export default function PantallaComida() {
       })
     }
 
-
-
     if(pestanaActiva == "platillos") {
       axios.get(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/menuPlatillos`)
       .then(response => {

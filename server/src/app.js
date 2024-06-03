@@ -5,6 +5,7 @@ import morgan from  "morgan";
 import EstRoutes from './routes/estudiante.js'; 
 import router from "./routes/menuEst.js";
 import pedidosRouter from "./routes/pedidosEst.js";
+import pedidos from "./routes/pedidos.js";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(EstRoutes); 
 app.use(router);
 app.use(pedidosRouter)
+app.use(pedidos);
 
 //console.log(EstRoutes);
 
