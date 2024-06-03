@@ -53,6 +53,11 @@ export const agregarCarrito = async(req,res) => {
   try {
     const conn = await connDB();
     const body = req.body.userId;
+    // se  borran sus pedidos para volver a crearlos
+    const [firstDelete] = await conn.execute(
+      "DELETE FROM pedido WHERE ped_car_id IN (SELECT car_id FROM carrito WHERE car_est_id = ?)",
+      [body]
+    )
     const [result] = await conn.execute(
       "INSERT INTO pedido (ped_car_id, ped_cantidadTotal, car_fecha) SELECT carrito.car_id, menu.men_precio, carrito.car_fecha FROM carrito, menu WHERE carrito.car_est_id = ? AND menu.men_id = carrito.car_men_id; ",
       [body]

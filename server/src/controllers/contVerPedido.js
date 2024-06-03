@@ -138,15 +138,3 @@ export const deleteCarMenu = async (req,res) =>{
   }
 
 }
-
-export const obtenerTodosLosPedidosUsuario = async(req,res) => {
-  try {
-    const conn = await connDB();
-    const body = req;
-    // SELECT pedido.ped_cantidadTotal, carrito.car_fecha FROM pedido INNER JOIN carrito ON carrito.car_id = pedido.ped_car_id AND carrito.car_est_id = ?
-    console.log(body);
-  } catch (error) {
-    console.log(error);
-    res.json({"success": false, "msg": error})
-  }
-}
