@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Button, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Button, ScrollView, Alert } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import axios from 'axios';
 import { useAuth } from '../../../modules/context/auth';
 import { comidaCafeteria } from '../../../types/userTypes';
+import { agregarAlCarrito } from '../../../api';
 
 interface CartItem {
   id: number;
@@ -66,8 +67,13 @@ export default function OrderLayoutTab() {
 
   const payOrder = async() => {
     // hacer una peticion post al mysql con la informacion del usuario
-    console.log(getUserId());
-    
+    const response = await agregarAlCarrito(getUserId());
+    if(!response.data.success) {
+      // en caso de error no continuar
+      Alert.alert("Error", "Error al crear su pedido");
+      return;
+    }
+    console.log(response);
     setPaymentSuccess(true);
     setTimeout(() => {
       resetOrderState();

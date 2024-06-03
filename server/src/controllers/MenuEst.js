@@ -48,3 +48,19 @@ export const postmenu = async(req,res) =>{
     res.json({"success" : false , "msg": err.sqlMessage })
   }
 }
+
+export const agregarCarrito = async(req,res) => {
+  try {
+    const conn = await connDB();
+    const body = req.body.userId;
+    const [result] = await conn.execute(
+      "INSERT INTO pedido (ped_car_id, ped_cantidadTotal, car_fecha) SELECT carrito.car_id, menu.men_precio, carrito.car_fecha FROM carrito, menu WHERE carrito.car_est_id = ? AND menu.men_id = carrito.car_men_id; ",
+      [body]
+    );
+    console.log(result);
+    res.json({"success": true})
+  } catch (error) {
+    console.log(error);
+    res.json({"success": false, "msg": err})
+  }
+}

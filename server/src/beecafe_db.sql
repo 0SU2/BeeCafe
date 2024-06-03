@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS carrito(
     car_id INT NOT NULL AUTO_INCREMENT,
     car_est_id INT NOT NULL, 
     car_men_id INT NOT NULL,    
+    car_fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (car_id),
     CONSTRAINT fk_carrito_estudiantes
         FOREIGN KEY (car_est_id)
@@ -75,7 +76,7 @@ CREATE TABLE IF NOT EXISTS pedido (
     ped_id INT NOT NULL AUTO_INCREMENT,
     ped_car_id INT NOT NULL, 
     ped_cantidadTotal DECIMAL(10,2),
-    ped_fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    car_fecha TIMESTAMP ,
     PRIMARY KEY (ped_id),
     CONSTRAINT fk_pedido_estudiantes
         FOREIGN KEY (ped_car_id)
@@ -83,13 +84,6 @@ CREATE TABLE IF NOT EXISTS pedido (
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
-
-INSERT INTO pedido (ped_car_id)
-	SELECT car_id
-	FROM carrito
-		WHERE car_est_id = 1;
-
-
 
 --     men_platillo
 --     men_descripcion

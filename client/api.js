@@ -92,3 +92,8 @@ export const sesionWithAxios = async(newEst) => {
   }
   
 }
+
+export const agregarAlCarrito = async(userId) => {
+  const res = await axios.post(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/agregarCarrito`, {userId});
+  return {...res}
+}
