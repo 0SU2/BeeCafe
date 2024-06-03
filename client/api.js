@@ -50,7 +50,7 @@ export const registroWithAxios = async(newEst) => {
     console.log("ENTRA POSTEST WITH AXIOS");
     console.log(process.env.EXPO_PUBLIC_IPV4_OWN)
                                   // ipv4 from wifi connected and current port from the server
-    const res = await axios.post(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/registro`,{newEst});
+    const res = await axios.post(`http://${process.env.EXPO_PUBLIC_IPV4_OWN}:${process.env.EXPO_PUBLIC_PORT_SERVER}/estudiante/registro`,{newEst});
     console.log("siguiente de res")
     if(!res.data.success) {
       console.log("entra if")

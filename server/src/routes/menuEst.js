@@ -1,7 +1,6 @@
 import { Router } from "express";
-import { getAllMenuComida, getAllMenuPlatillos, getAllMenyBebidas, getAllMenuDesayunos } from "../controllers/MenuEst.js";
+import { getAllMenuComida, getAllMenuPlatillos, getAllMenyBebidas, getAllMenuDesayunos, postmenu } from "../controllers/MenuEst.js";
 
-import { getAllMenuComida, getAllMenuPlatillos, getAllMenyBebidas, postmenu } from "../controllers/MenuEst.js";
 import { getCarUser, deleteCarMenu } from "../controllers/contVerPedido.js"
 const router = Router();
 
