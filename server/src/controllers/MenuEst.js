@@ -8,13 +8,19 @@ export const getAllMenuComida = async(req, res) => {
 
 export const getAllMenuPlatillos = async(req, res) => {
   const con = await connDB();
-  const [rows] = await con.execute("SELECT * FROM menu WHERE men_tipo = 'Preparado' ");
+  const [rows] = await con.execute("SELECT * FROM menu WHERE men_tipo = 'Platillo' ");
   res.json(rows)
 }
 
 export const getAllMenyBebidas = async(req, res) => {
   const con = await connDB();
   const [rows] = await con.execute("SELECT * FROM menu WHERE men_tipo = 'Bebida' ");
+  res.json(rows)
+}
+
+export const getAllMenuDesayunos = async(req, res) => {
+  const con = await connDB();
+  const [rows] = await con.execute("SELECT * FROM menu WHERE men_tipo = 'Desayuno' ");
   res.json(rows)
 }
 
