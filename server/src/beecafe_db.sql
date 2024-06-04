@@ -94,23 +94,26 @@ CREATE TABLE IF NOT EXISTS pedido (
 --     men_ingredientes TEXT,
 --     men_tiempo_preparacion INT
 
+-- ----------------------------------------------------------------
+-- Actualizadas Torta de huevo y chorizo, flan y agua de frutas --
+-- ----------------------------------------------------------------
 INSERT INTO menu(men_platillo, men_descripcion, men_tipo, men_categoria, men_precio, men_disponible, men_ingredientes, men_tiempo_preparacion, men_img)
 	VALUES('Pozole con Salchicha', 'pozole con salchicha', 'Comida', 'Sopas', 85.00, 1, 'Salchicha, maíz, chile, cebolla, ajo', 45, 'https://aderezo.mx/wp-content/uploads/2023/09/FtdNaNVXgAQsx7e.jpeg'),
             ('Guiso', 'Frijoles, pan, café o agua de frutas', 'Desayuno', 'Desayunos', 65.00, 1, 'Frijoles y pan, Café o agua de frutas', 20, 'https://media.ambito.com/p/1b3988a1cf0283e96b2b179e92631596/adjuntos/239/imagenes/040/874/0040874568/receta-del-guiso-carrerojpg.jpg'),
             ('Yoghurt preparado', 'Un yoghurt preparado con frutas, cereales y granola', 'Desayuno', 'Cocteles', 35.00, 1, 'frutas, cereales y granola', 20, 'https://www.dairydiscoveryzone.com/sites/default/files/ParfaitsMain.jpg'),
             ('Coctel de frutas', 'Delicioso coctel de frutas preparado', 'Desayuno', 'Cocteles', 30.00, 1, 'frutas, miel y granola', 20, 'https://peopleenespanol.com/thmb/nKNCbtZACj0CWsvOSBEdfu4LDHM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/coctel-de-frutas-facil-2000-7dd72cf51d2d4c9d8e876b85255111e6.jpg'),
-            ('Flan', 'Delicioso flan', 'Desayuno', 'Cocteles', 17.00, 1, 'Flan', 20, 'https://www.lactaidenespanol.com/sites/lactaid_us/files/recipe-images/easy_flan2_0.jpg'),
+            ('Flan', 'Delicioso flan', 'Desayuno', 'Cocteles', 17.00, 1, 'Flan', 20, 'https://mccormick.widen.net/content/ki299zd9sv/original/flan_de_queso_cremoso_creamy_cheese_flan5769_800x800.jpg'),
             ('Gelatina', 'Una gelatina lista para desayunar', 'Desayuno', 'Cocteles', 20.00, 1, 'Gelatina', 20, 'https://www.eluniversal.com.mx/resizer/w9My9ie3sZ-si7DAvOjapZXdKp4=/1100x666/cloudfront-us-east-1.images.arcpublishing.com/eluniversal/WK5O5PRORFDCPAFAIPLQIFHLBQ.jpg'),
             ('Arroz con leche', 'Una gran combinación para quitar el hambre', 'Desayuno', 'Cocteles', 20.00, 1, 'Leche y arroz', 20, 'https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/A4F055C9-D340-4F2A-9015-6A2659851E84/Derivates/5b9a24d1-7748-4bfe-ba63-fb3e5f722db0.jpg'),
             ('Sopa del día', 'Plato fuerte más arroz o espagueti, verdura o frijoles, tortilla y agua de frutas', 'Comida', 'Comida corrida', 80.00, 1, 'Arroz o spaghetti, verduras o frijoles, Tortillas de maíz con un agua de frutas', 20, 'https://www.supermaxi.com/wp-content/uploads/2020/06/sopas.jpg'),
-            ('Torta de huevo', 'Una torta de huevo', 'Comida', 'Comida rápida', 30.00, 1, 'Pan, huevo', 15, 'https://lh3.googleusercontent.com/proxy/0ruBOLshMCxOmCTilrIzGGwl8N2ichPyIVnwSBr0cQsUL5gILGvhhSY9yiH4-mGrzWXDxyPIFe3ojNghIlQhs08WPjJyKahFLQlrXKOVfstc0InhNtTfOo9XHhYOjE4'),
+            ('Torta de huevo', 'Una torta de huevo', 'Comida', 'Comida rápida', 30.00, 1, 'Pan, huevo', 15, 'https://storage.googleapis.com/fitia-api-bucket/media/images/recipe_images/1003392.jpg'),
             ('Torta de jamón', 'Deliciosa torta de jamón', 'Comida', 'Comida rápida', 35.00, 1, 'Pan, jamón, verdura', 15, 'https://storage.googleapis.com/fitia-api-bucket/media/images/recipe_images/1003393.jpg'),
-            ('Torta de chorizo', 'Deliciosa torta de chorizo', 'Comida', 'Comida rápida', 45.00, 1, 'Pan y chorizo', 20, 'https://lh3.googleusercontent.com/proxy/HSlFeG3GUrfLEd0OlcdQfqwCBVtEL8ljz7gpK1oG6l11FKj4Y4f8yBlw7yIzEgBsGszj_VRtuoKGurnfkzCTEB0YOVg9wfETLVVYWKIEEZuxFdLYcBx7qdDg8brm7V9zWsVjmsXiG1g'),
+            ('Torta de chorizo', 'Deliciosa torta de chorizo', 'Comida', 'Comida rápida', 45.00, 1, 'Pan y chorizo', 20, 'https://www.eatingwell.com/thmb/wac7_nhZrKQDt7xa-Xgk0nfondQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/3748354-8fd6255f8ad54b7c916e91675114559c.jpg'),
             ('Torta de carnitas', 'Deliciosa torta de carnitas', 'Comida', 'Comida rápida', 50.00, 1, 'Pan, carnitas', 25, 'https://tangolunda.com.mx/wp-content/uploads/2022/10/torta-carnitas.jpg'),
             ('Torta cubana', 'Deliciosa torta cubana con pierna, queso asadero y amarillo, salchicha y jamón', 'Comida', 'Comida rápida', 60.00, 1, 'Pan, jamón, verdura', 30, 'https://www.paulinacocina.net/wp-content/uploads/2023/06/que-lleva-una-torta-cubana.jpg'),
             ('Jugo de naranja (Vaso)', 'Un vaso de jugo de naranja para la sed', 'Bebida', 'Bebidas', 25.00, 1, 'Naranja, agua', 15, 'https://img77.uenicdn.com/image/upload/v1569641123/business/jugos-el-confee/46a720c9-400d-460d-854d-dfb9d924d832.jpg'),
             ('Jugo de naranja (Litro)', 'Un litro de jugo de naranja para la sed', 'Bebida', 'Bebidas', 40.00, 1, 'Naranja, agua', 15, 'https://www.gastrolabweb.com/u/fotografias/m/2020/10/11/f850x638-4179_81668_5050.jpg'),
-            ('Agua fresca de frutas (Vaso)', 'Un vaso de agua de frutas para la sed', 'Bebida', 'Bebidas', 17.00, 1, 'Fruta, agua', 20, 'https://editorialtelevisa.brightspotcdn.com/wp-content/uploads/2019/08/agua-de-frutas.jpg'),
+            ('Agua fresca de frutas (Vaso)', 'Un vaso de agua de frutas para la sed', 'Bebida', 'Bebidas', 17.00, 1, 'Fruta, agua', 20, 'https://www.cocinavital.mx/wp-content/uploads/2018/07/agua-de-frutas-e1562606943568.jpg'),
             ('Agua fresca de frutas (Litro)', 'Un litro de agua de frutas para la sed', 'Bebida', 'Bebidas', 27.00, 1, 'Fruta, agua', 20, 'https://editorialtelevisa.brightspotcdn.com/wp-content/uploads/2019/08/agua-de-frutas.jpg'),
             ('Café de olla', 'Café preparado en olla', 'Bebida', 'Bebidas', 15.00, 1, 'Café', 20, 'https://cdn2.cocinadelirante.com/sites/default/files/images/2023/11/como-preparar-cafe-de-olla-con-cafe-instantaneo.jpg'),
             ('Café con leche', 'Café preparado con leche', 'Bebida', 'Bebidas', 20.00, 1, 'Café y leche', 20, 'https://i.blogs.es/421374/cafe-con-leche2/450_1000.jpg'),
