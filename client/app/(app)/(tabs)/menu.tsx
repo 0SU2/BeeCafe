@@ -1,6 +1,7 @@
 import React, { ComponentState, useState } from 'react';
 import { ScrollView, StyleSheet, View, Text, Modal, Alert } from 'react-native';
 import { Card, Button, Portal, Provider, Paragraph } from 'react-native-paper';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import axios from 'axios';
 import { comidaCafeteria } from '../../../types/userTypes';
@@ -8,20 +9,32 @@ import { useAuth } from '../../../modules/context/auth';
 
 
 
-
 const TarjetaComidaMyComida: React.FC<{ comida: comidaCafeteria, onAgregarAlCarrito: (comida:comidaCafeteria) => void, onMostrarDetalles: (comida: comidaCafeteria) => void }> = ({ comida, onAgregarAlCarrito, onMostrarDetalles }) => {
   return (
     <Card style={styles.card}>
-      <Card.Title title={comida.men_platillo} subtitle={`$${comida.men_precio}`} />
+      <Card.Title  title={comida.men_platillo} subtitle={`$${comida.men_precio}`}
+        titleStyle={{ color: 'white' }}
+        subtitleStyle={{ color: 'white' }}
+      />
       <Card.Cover source={{ uri: comida.men_img }} style={styles.cardImage} />
-      <Card.Content>
-        <Paragraph>{comida.men_descripcion}</Paragraph>
+      <Card.Content >
+        <Paragraph style={{ color: 'white' }}>{comida.men_descripcion}</Paragraph>
       </Card.Content>
       <Card.Actions>
-        <Button mode="contained" onPress={() => onAgregarAlCarrito(comida)} color="blue">
+        <Button 
+          mode="contained" 
+          onPress={() => onAgregarAlCarrito(comida)} 
+          style={{ borderColor: '#3b5998', borderWidth: 2, backgroundColor: 'rgba(255, 245, 112, 0.8)' }}  // Estilos personalizados para cambiar el color de fondo y borde
+          labelStyle={{ color: 'black' }} 
+        >
           Añadir al Carrito
         </Button>
-        <Button mode="outlined" onPress={() => onMostrarDetalles(comida)} color="blue">
+        <Button
+          mode="outlined"
+          onPress={() => onMostrarDetalles(comida)}
+          style={{ borderColor: 'rgba(255, 245, 112, 0.8)', borderWidth: 2, backgroundColor: 'white' }}  // Estilos personalizados para cambiar el color de fondo y borde
+          labelStyle={{ color: 'black' }}  // Cambia el color del texto
+        >
           Ver Detalles
         </Button>
       </Card.Actions>
@@ -38,7 +51,7 @@ const ModalDetallesComida: React.FC<{ visible: boolean, comida: comidaCafeteria 
           <Text style={styles.modalTitulo}>{comida?.men_platillo}</Text>
           <Paragraph style={styles.modalDescripcion}>{comida?.men_descripcion}</Paragraph>
           <Text style={styles.modalPrecio}>${comida?.men_precio}</Text>
-          <Button mode="contained" onPress={onCerrar} style={styles.botonCerrar}>
+          <Button mode="contained" onPress={onCerrar} style={styles.botonCerrar} labelStyle={{ color: 'black' }} >
             Cerrar
           </Button>
         </View>
@@ -168,12 +181,15 @@ export default function PantallaComida() {
       <View style={styles.fullScreen}>
         <Text style={styles.titulo}>¿Qué se te antoja?</Text>
         <View style={styles.tabContainer}>
-        <Button
+          <Button
             mode={pestanaActiva === 'desayuno' ? 'contained' : 'outlined'}
-            onPress={() => {
-              setPestanaActiva('desayuno')
-            }}
-            style={styles.tabButton}
+            onPress={() => setPestanaActiva('desayuno')}
+            color={pestanaActiva === 'desayuno' ? 'white' : '#3b5998'}  // Cambia el color del texto/fondo
+            style={[styles.tabButton, {
+              backgroundColor: pestanaActiva === 'desayuno' ? '#4c669f' : 'transparent',  // Cambia el color de fondo
+              borderColor: '#3b5998'  // Puedes definir un color de borde constante si deseas
+            }]}
+            labelStyle={styles.tabText}
           >
             Desayunos
           </Button>
@@ -183,7 +199,12 @@ export default function PantallaComida() {
             onPress={() => {
               setPestanaActiva('comida')
             }}
-            style={styles.tabButton}
+            color={pestanaActiva === 'comida' ? 'white' : '#3b5998'}  // Cambia el color del texto/fondo
+            style={[styles.tabButton, {
+              backgroundColor: pestanaActiva === 'comida' ? '#4c669f' : 'transparent',  // Cambia el color de fondo
+              borderColor: '#3b5998'  // Puedes definir un color de borde constante si deseas
+            }]}
+            labelStyle={styles.tabText}
           >
             Comida
           </Button>
@@ -192,7 +213,12 @@ export default function PantallaComida() {
             onPress={() => {
               setPestanaActiva('platillos')
             }}
-            style={styles.tabButton}
+            color={pestanaActiva === 'platillos' ? 'white' : '#3b5998'}  // Cambia el color del texto/fondo
+            style={[styles.tabButton, {
+              backgroundColor: pestanaActiva === 'platillos' ? '#4c669f' : 'transparent',  // Cambia el color de fondo
+              borderColor: '#3b5998'  // Puedes definir un color de borde constante si deseas
+            }]}
+            labelStyle={styles.tabText}
           >
             Platillos
           </Button>
@@ -201,7 +227,12 @@ export default function PantallaComida() {
             onPress={() => {
               setPestanaActiva('bebidas')
             }}
-            style={styles.tabButton}
+            color={pestanaActiva === 'bebidas' ? 'white' : '#3b5998'}  // Cambia el color del texto/fondo
+            style={[styles.tabButton, {
+              backgroundColor: pestanaActiva === 'bebidas' ? '#4c669f' : 'transparent',  // Cambia el color de fondo
+              borderColor: '#3b5998'  // Puedes definir un color de borde constante si deseas
+            }]}
+            labelStyle={styles.tabText}
           >
             Bebidas
           </Button>
@@ -233,6 +264,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     width: '90%',
     alignSelf: 'center',
+    backgroundColor: '#3b5998',
   },
   cardImage: {
     height: 200,
@@ -266,13 +298,23 @@ const styles = StyleSheet.create({
   },
   botonCerrar: {
     marginTop: 20,
+    borderColor: '#3b5998',
+    borderWidth: 2, 
+    backgroundColor: 'rgba(255, 245, 112, 0.8)'
   },
   tabContainer: {
     flexDirection: 'row',
     marginBottom: 20,
   },
   tabButton: {
-    marginHorizontal: 5,
+    marginHorizontal: 2,  // Reducir espacio entre botones
+    paddingVertical: 0.1,   // Reducir el padding vertical para disminuir la altura
+    paddingHorizontal: 0.1, // Reducir el padding horizontal para disminuir el ancho
+  },
+  // Asegúrate de que todos los botones utilicen este estilo
+  tabText: {
+    fontSize: 9.5, // Reduce el tamaño de la fuente para que el texto sea más pequeño
+    color: 'black'
   },
   textoPlaceholder: {
     fontSize: 18,
