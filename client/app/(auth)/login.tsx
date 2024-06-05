@@ -129,17 +129,13 @@ export default function App() {
         </Pressable>
       </View>
 
-      <View style={styles.button}>
+      <TouchableOpacity onPress={loginUser} style={styles.button}>
         <LinearGradient
-          colors={['#4c669f', '#3b5998', '#192f6a']}
+          colors={['#4c669f', '#3b5998', '#192f6a']} // Colores del gradiente
           style={styles.gradient}>
-          <Button
-            onPress={loginUser}
-            title="Iniciar Sesión"
-            color="#ffffff"
-          />
+          <Text style={styles.buttonText}>Iniciar Sesión</Text>
         </LinearGradient>
-      </View>
+      </TouchableOpacity>
 
       <View style={styles.registerContainer}>
         <Text style={styles.registerText}>Recuperar </Text>
@@ -322,8 +318,10 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
+    textAlign: 'center',
+    margin: 10
   },
   formContainer: {
     marginTop: 50,
