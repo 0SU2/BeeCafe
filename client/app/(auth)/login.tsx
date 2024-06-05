@@ -138,8 +138,8 @@ export default function App() {
       </TouchableOpacity>
 
       <View style={styles.registerContainer}>
-        <Text style={styles.registerText}>Recuperar </Text>
-        <Link href="/(auth)/recovery" style={styles.registerLink}>contraseña</Link>
+        <Text style={styles.registerText}>¿Olvidaste tu contraseña? </Text>
+        <Link href="/(auth)/recovery" style={styles.registerLink}>Recupérala</Link>
       </View>     
 
       <View style={styles.registerContainer}
